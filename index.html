@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TalkIME — Type with your voice, anywhere</title>
+<meta name="description" content="TalkIME turns your voice into text wherever your cursor is. Hold Alt+Z, speak, release — it types for you. Works in any app on Windows.">
+<meta property="og:title" content="TalkIME — Type with your voice">
+<meta property="og:description" content="Hold Alt+Z, speak, release. TalkIME types for you in any app on Windows.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23f4f4fb'/%3E%3Cg transform='translate(106,86) scale(0.520833)'%3E%3Cpath fill='%236a5cff' d='M291.2 388.4c31.2-18.8 64.7-36.4 101.1-36.4l55.7 0c4.6 0 9.1-.2 13.6-.7l85.3 121.9c4 5.7 11.3 8.2 17.9 6.1s11.2-8.3 11.2-15.3l0-240c0-70.7-57.3-128-128-128l-55.7 0c-36.4 0-69.9-17.6-101.1-36.4C262.3 42.1 228.3 32 192 32C86 32 0 118 0 224c0 71.1 38.6 133.1 96 166.3L96 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-46c15.3 3.9 31.4 6 48 6c5.4 0 10.7-.2 16-.7l0 40.7c0 13.3 10.7 24 24 24s24-10.7 24-24l0-50.9c12.4-4.4 24.2-10 35.2-16.7zM448 200a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0f0f14;
+    --bg-2:#16161b;
+    --panel:#1a1a22;
+    --panel-2:#20202a;
+    --stroke:#2a2a38;
+    --text:#ececf1;
+    --text-2:#a8a8b6;
+    --text-3:#6b6b7c;
+    --accent:#7c8aff;
+    --accent-2:#6a5cff;
+    --accent-soft:rgba(124,138,255,.12);
+    --radius:16px;
+    --maxw:1080px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  /* ── Ambient glow ── */
+  .glow{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 50% -5%, rgba(124,138,255,.18), transparent 70%),
+      radial-gradient(500px 500px at 85% 20%, rgba(106,92,255,.10), transparent 70%),
+      radial-gradient(500px 500px at 10% 40%, rgba(124,138,255,.07), transparent 70%);
+  }
+
+  /* ── Nav ── */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(15,15,20,.6);
+    border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:.01em}
+  .logo .mark{
+    width:34px;height:34px;border-radius:9px;flex-shrink:0;
+    background:linear-gradient(135deg,#f4f4fb,#e7e7f3);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo .mark svg{width:22px;height:22px}
+  .nav-cta{
+    padding:9px 18px;border-radius:9px;font-size:13.5px;font-weight:600;
+    background:var(--accent);color:#fff;transition:background .15s,transform .1s;
+  }
+  .nav-cta:hover{background:var(--accent-2)}
+  .nav-cta:active{transform:scale(.97)}
+
+  /* ── Hero ── */
+  header{padding:88px 0 72px;text-align:center;position:relative}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 14px;border-radius:999px;margin-bottom:28px;
+    background:var(--accent-soft);border:1px solid rgba(124,138,255,.25);
+    font-size:12.5px;font-weight:600;color:var(--accent);letter-spacing:.02em;
+  }
+  .badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 rgba(124,138,255,.6);animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,138,255,.5)}70%{box-shadow:0 0 0 9px rgba(124,138,255,0)}100%{box-shadow:0 0 0 0 rgba(124,138,255,0)}}
+  h1{
+    font-size:clamp(38px,6.4vw,68px);line-height:1.05;font-weight:800;
+    letter-spacing:-.02em;margin-bottom:22px;
+  }
+  h1 .grad{
+    background:linear-gradient(120deg,#a6b0ff 0%,#7c8aff 45%,#6a5cff 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{
+    font-size:clamp(16px,2.2vw,20px);color:var(--text-2);
+    max-width:600px;margin:0 auto 20px;font-weight:400;
+  }
+
+  /* ── Keycaps ── */
+  .keys{
+    display:inline-flex;align-items:center;gap:10px;margin:8px 0 34px;
+    padding:14px 22px;border-radius:14px;
+    background:var(--panel);border:1px solid var(--stroke);
+  }
+  .key{
+    background:var(--panel-2);border:1px solid #33334a;border-bottom:3px solid #14141e;
+    border-radius:9px;padding:9px 18px;font-size:15px;font-weight:700;min-width:56px;
+    text-align:center;color:var(--text);letter-spacing:.02em;
+  }
+  .key.accent{color:var(--accent);background:var(--accent-soft);border-color:rgba(124,138,255,.4);border-bottom-color:rgba(124,138,255,.2)}
+  .key-plus{color:var(--text-3);font-size:16px}
+  .key-hint{color:var(--text-3);font-size:13px;margin-left:8px}
+
+  /* ── CTA buttons ── */
+  .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;justify-content:center;
+    padding:15px 30px;border-radius:12px;font-size:15.5px;font-weight:600;
+    transition:transform .12s,background .15s,box-shadow .2s;cursor:pointer;border:none;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,#7c8aff,#6a5cff);color:#fff;
+    box-shadow:0 8px 28px rgba(106,92,255,.4);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(106,92,255,.55)}
+  .btn-primary:active{transform:translateY(0)}
+  .btn-ghost{background:var(--panel);color:var(--text);border:1px solid var(--stroke)}
+  .btn-ghost:hover{background:var(--panel-2);border-color:#3a3a4e}
+  .btn svg{width:18px;height:18px}
+  .dl-meta{margin-top:16px;font-size:12.5px;color:var(--text-3)}
+
+  /* ── Trust bar ── */
+  .trust{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:44px}
+  .trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-2)}
+  .trust-item svg{width:16px;height:16px;color:var(--accent)}
+
+  /* ── Section ── */
+  section{padding:72px 0}
+  .sec-head{text-align:center;max-width:640px;margin:0 auto 52px}
+  .sec-head .eyebrow{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+  .sec-head h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.02em;margin-bottom:14px;line-height:1.15}
+  .sec-head p{font-size:16px;color:var(--text-2)}
+
+  /* ── Feature grid ── */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .card{
+    background:linear-gradient(180deg,var(--panel),rgba(26,26,34,.6));
+    border:1px solid var(--stroke);border-radius:var(--radius);padding:28px 24px;
+    transition:transform .18s,border-color .18s,box-shadow .18s;
+  }
+  .card:hover{transform:translateY(-4px);border-color:rgba(124,138,255,.4);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+  .card .ico{
+    width:46px;height:46px;border-radius:12px;margin-bottom:18px;
+    background:var(--accent-soft);border:1px solid rgba(124,138,255,.25);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .card .ico svg{width:24px;height:24px;color:var(--accent)}
+  .card h3{font-size:17px;font-weight:700;margin-bottom:8px}
+  .card p{font-size:14px;color:var(--text-2);line-height:1.65}
+
+  /* ── How it works ── */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:step}
+  .step{
+    background:var(--panel);border:1px solid var(--stroke);border-radius:var(--radius);
+    padding:30px 26px;position:relative;
+  }
+  .step .num{
+    counter-increment:step;
+    width:38px;height:38px;border-radius:10px;margin-bottom:18px;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#7c8aff,#6a5cff);color:#fff;font-weight:800;font-size:16px;
+  }
+  .step .num::after{content:counter(step)}
+  .step h3{font-size:17px;font-weight:700;margin-bottom:8px}
+  .step p{font-size:14px;color:var(--text-2)}
+  .step .arrow{
+    position:absolute;right:-14px;top:50%;transform:translateY(-50%);
+    color:var(--stroke);font-size:22px;z-index:2;
+  }
+  .step:last-child .arrow{display:none}
+
+  /* ── Final CTA ── */
+  .final{
+    text-align:center;padding:64px 40px;margin:0 24px;
+    background:
+      radial-gradient(600px 300px at 50% 0%,rgba(124,138,255,.16),transparent 70%),
+      linear-gradient(180deg,var(--panel),var(--bg-2));
+    border:1px solid var(--stroke);border-radius:28px;
+    max-width:var(--maxw);margin-left:auto;margin-right:auto;
+  }
+  .final h2{font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:-.02em;margin-bottom:16px}
+  .final p{font-size:16px;color:var(--text-2);margin-bottom:30px;max-width:520px;margin-left:auto;margin-right:auto}
+
+  /* ── Footer ── */
+  footer{padding:48px 0 40px;border-top:1px solid rgba(255,255,255,.05);margin-top:72px}
+  footer .wrap{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+  footer .logo{opacity:.85}
+  .foot-links{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;font-size:13.5px;color:var(--text-2)}
+  .foot-links a:hover{color:var(--text)}
+  .attribution{font-size:12px;color:var(--text-3);max-width:560px;line-height:1.6}
+  .attribution a{color:var(--text-2);text-decoration:underline;text-underline-offset:2px}
+  .copyright{font-size:12.5px;color:var(--text-3)}
+
+  /* ── Reveal animation ── */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ── Responsive ── */
+  @media(max-width:1000px){
+    .features{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:860px){
+    .steps{grid-template-columns:1fr}
+    .step .arrow{display:none}
+    header{padding:64px 0 56px}
+    section{padding:56px 0}
+  }
+  @media(max-width:620px){
+    .features{grid-template-columns:1fr}
+    .keys{flex-wrap:wrap;justify-content:center}
+    .key-hint{margin-left:0;width:100%;text-align:center}
+    .final{padding:48px 22px;margin:0 16px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .pulse{animation:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="wrap">
+    <div class="logo">
+      <span class="mark">
+        <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path fill="#6a5cff" d="M291.2 388.4c31.2-18.8 64.7-36.4 101.1-36.4l55.7 0c4.6 0 9.1-.2 13.6-.7l85.3 121.9c4 5.7 11.3 8.2 17.9 6.1s11.2-8.3 11.2-15.3l0-240c0-70.7-57.3-128-128-128l-55.7 0c-36.4 0-69.9-17.6-101.1-36.4C262.3 42.1 228.3 32 192 32C86 32 0 118 0 224c0 71.1 38.6 133.1 96 166.3L96 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-46c15.3 3.9 31.4 6 48 6c5.4 0 10.7-.2 16-.7l0 40.7c0 13.3 10.7 24 24 24s24-10.7 24-24l0-50.9c12.4-4.4 24.2-10 35.2-16.7zM448 200a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
+      </span>
+      TalkIME
+    </div>
+    <a class="nav-cta" href="#download">Download</a>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<header>
+  <div class="wrap">
+    <span class="badge"><span class="pulse"></span> Voice-to-text for Windows</span>
+    <h1>Type with <span class="grad">your voice.</span><br>Anywhere your cursor is.</h1>
+    <p class="sub">No clicking, no switching apps, no copy-paste. Just hold a key, speak, and let go — TalkIME types it for you.</p>
+
+    <div class="keys">
+      <span class="key">Alt</span>
+      <span class="key-plus">+</span>
+      <span class="key accent">Z</span>
+      <span class="key-hint">hold to record · release to insert</span>
+    </div>
+
+    <div class="cta-row" id="download">
+      <a class="btn btn-primary" id="dl-btn" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        Download for Windows
+      </a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="dl-meta">Free 3-day trial · Windows 10/11 · ~29 MB · No admin rights needed</div>
+
+    <div class="trust">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Private by design — nothing stored or sent
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        Installs in seconds, no admin needed
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Text appears the instant you release
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── Features ── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">Why TalkIME</div>
+      <h2>Speak naturally. Get clean text.</h2>
+      <p>Fast, accurate voice input that works the way you already work — in every app, with the polish of an AI editor.</p>
+    </div>
+    <div class="features">
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <h3>Instant on release</h3>
+        <p>Streaming recognition transcribes as you speak, so the text lands the moment you let go of the key — no waiting.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <h3>Works in every app</h3>
+        <p>Anywhere text is editable — VS Code, Word, Chrome, Slack, WeChat. TalkIME types right where your cursor sits.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1L12 3z"/></svg></div>
+        <h3>Raw, Refined, Polished</h3>
+        <p>Get three versions instantly. Press Tab to cycle between the exact transcript, a cleaned-up edit, and a polished rewrite.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 109-9 9 9 0 00-9 9z"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Fix it by voice</h3>
+        <p>Don't like a word? Hold the key again and just say what to change — "swap Zhang San for Zhang Shan" — and it revises.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        <h3>Your own glossary</h3>
+        <p>Names, jargon, product terms — TalkIME learns the words you use so they're spelled right every time.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Context-aware</h3>
+        <p>Uses the text near your cursor to boost accuracy for your current task. On-device only — never stored, never uploaded.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ── -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>Three seconds to first words</h2>
+      <p>No setup, no training, no learning curve. If you can hold a key, you can use TalkIME.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num"></div>
+        <h3>Hold Alt + Z</h3>
+        <p>Put your cursor anywhere you'd normally type, then press and hold the shortcut.</p>
+        <span class="arrow">→</span>
+      </div>
+      <div class="step reveal">
+        <div class="num"></div>
+        <h3>Speak naturally</h3>
+        <p>Say what you want to write. TalkIME transcribes in real time as you talk.</p>
+        <span class="arrow">→</span>
+      </div>
+      <div class="step reveal">
+        <div class="num"></div>
+        <h3>Release to insert</h3>
+        <p>Let go and the text appears instantly at your cursor. Press Tab to pick a polished version.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Final CTA ── -->
+<section>
+  <div class="final reveal">
+    <h2>Stop typing. Start talking.</h2>
+    <p>Try TalkIME free for 3 days. Installs in seconds, runs in your tray, and works in every app you already use.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" id="dl-btn-2" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        Download for Windows
+      </a>
+    </div>
+    <div class="dl-meta">Free 3-day trial · Windows 10/11 · ~29 MB</div>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="wrap">
+    <div class="logo">
+      <span class="mark">
+        <svg viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path fill="#6a5cff" d="M291.2 388.4c31.2-18.8 64.7-36.4 101.1-36.4l55.7 0c4.6 0 9.1-.2 13.6-.7l85.3 121.9c4 5.7 11.3 8.2 17.9 6.1s11.2-8.3 11.2-15.3l0-240c0-70.7-57.3-128-128-128l-55.7 0c-36.4 0-69.9-17.6-101.1-36.4C262.3 42.1 228.3 32 192 32C86 32 0 118 0 224c0 71.1 38.6 133.1 96 166.3L96 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-46c15.3 3.9 31.4 6 48 6c5.4 0 10.7-.2 16-.7l0 40.7c0 13.3 10.7 24 24 24s24-10.7 24-24l0-50.9c12.4-4.4 24.2-10 35.2-16.7zM448 200a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/></svg>
+      </span>
+      TalkIME
+    </div>
+    <div class="foot-links">
+      <a href="#how">How it works</a>
+      <a href="#download">Download</a>
+    </div>
+    <p class="attribution">
+      Kiwi bird icon by <a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome</a>,
+      licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.
+    </p>
+    <p class="copyright">© 2026 TalkIME. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // Single source of truth for the installer link.
+  var DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.0/TalkIME-Setup-1.0.0.exe";
+  document.querySelectorAll('#dl-btn, #dl-btn-2').forEach(function(el){ el.setAttribute('href', DOWNLOAD_URL); });
+
+  // Reveal-on-scroll
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
