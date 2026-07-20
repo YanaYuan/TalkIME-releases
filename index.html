@@ -9,6 +9,14 @@
 <meta property="og:description" content="按住 Alt+Z 说话，松开生成，空格插入。无需替换现有输入法。">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23f4f4fb'/%3E%3Cg transform='translate(106,86) scale(0.520833)'%3E%3Cpath fill='%236a5cff' d='M291.2 388.4c31.2-18.8 64.7-36.4 101.1-36.4l55.7 0c4.6 0 9.1-.2 13.6-.7l85.3 121.9c4 5.7 11.3 8.2 17.9 6.1s11.2-8.3 11.2-15.3l0-240c0-70.7-57.3-128-128-128l-55.7 0c-36.4 0-69.9-17.6-101.1-36.4C262.3 42.1 228.3 32 192 32C86 32 0 118 0 224c0 71.1 38.6 133.1 96 166.3L96 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-46c15.3 3.9 31.4 6 48 6c5.4 0 10.7-.2 16-.7l0 40.7c0 13.3 10.7 24 24 24s24-10.7 24-24l0-50.9c12.4-4.4 24.2-10 35.2-16.7zM448 200a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/%3E%3C/g%3E%3C/svg%3E">
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    c[a]("consentv2",{ad_Storage:"denied",analytics_Storage:"denied"});
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window,document,"clarity","script","xpgrnj0krj");
+</script>
 <style>
   :root{
     --bg:#0f0f14;
@@ -455,6 +463,7 @@
       Kiwi bird icon by <a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome</a>,
       licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.
     </p>
+    <p class="attribution">本页使用 Microsoft Clarity 进行无 Cookie 的访问与点击统计，不设置持久访客标识。</p>
     <p class="copyright">© 2026 TalkIME. All rights reserved.</p>
   </div>
 </footer>
@@ -463,6 +472,28 @@
   // 安装包链接的唯一配置入口。
   var DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.3/TalkIME-Setup-1.0.3.exe";
   document.querySelectorAll('#dl-btn, #dl-btn-2').forEach(function(el){ el.setAttribute('href', DOWNLOAD_URL); });
+
+  // 无 Cookie 落地页统计：不设置用户 ID，只记录版本、渠道和按钮位置。
+  var campaign = new URLSearchParams(window.location.search);
+  ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function(key){
+    var value = campaign.get(key);
+    if(value){ window.clarity('set', key, value.slice(0, 100)); }
+  });
+  var referrerHost = 'direct';
+  if(document.referrer){
+    try{ referrerHost = new URL(document.referrer).hostname || 'direct'; }catch(e){}
+  }
+  window.clarity('set', 'release_version', '1.0.3');
+  window.clarity('set', 'referrer_host', referrerHost.slice(0, 100));
+  window.clarity('event', 'landing_page_view');
+
+  function trackClick(selector, eventName){
+    var el = document.querySelector(selector);
+    if(el){ el.addEventListener('click', function(){ window.clarity('event', eventName); }); }
+  }
+  trackClick('.nav-cta', 'nav_free_trial_click');
+  trackClick('#dl-btn', 'download_click_hero');
+  trackClick('#dl-btn-2', 'download_click_bottom');
 
   // Reveal-on-scroll
   var io = new IntersectionObserver(function(entries){
