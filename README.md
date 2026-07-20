@@ -1,12 +1,28 @@
 # TalkIME
 
-Voice-to-text that types wherever your cursor is. Hold **Alt+Z** to speak, release to type.
+Windows 全局 AI 语音输入：在任意输入框中按住 **Alt+Z** 说话，松开后查看结果，按 **空格** 插入到光标处。无需替换搜狗、微信、双拼或五笔等现有输入法。
 
-## Download
+## 下载
 
-Get the latest installer from the [Releases page](https://github.com/YanaYuan/TalkIME-releases/releases/latest).
+从 [Releases 页面](https://github.com/YanaYuan/TalkIME-releases/releases/latest)下载最新版安装包。
 
-Installs to your user folder (no administrator rights required).
+- Windows 10 / 11
+- 安装到当前用户目录，无需管理员权限
+- 免费试用 3 天
+
+## 第一次使用
+
+1. 安装并启动 TalkIME，使用 Microsoft 账号登录。
+2. 把光标放进 Cursor、Claude Code、Word、浏览器等任意输入框。
+3. 按住 **Alt+Z** 说话，松开后按 **Tab** 切换结果，按 **空格** 插入，按 **Esc** 放弃。
+4. 结果卡显示时，可再次按住 **Alt+Z**，直接说出修改要求。
+
+## 数据处理说明
+
+- 语音识别与 AI 整理通过云端服务完成。
+- 光标前文默认开启，屏幕语境默认关闭；启用后，相关上下文会发送到云端模型用于本次处理。
+- 运营埋点只记录耗时、字数、结果状态等数值或枚举，不记录转写正文、个人词条或屏幕内容。
 
 ---
-This repository hosts public installer downloads only. The application source code is maintained privately.
+
+本仓库仅用于托管公开安装包与下载页，应用源代码单独维护。

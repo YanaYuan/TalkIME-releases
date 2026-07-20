@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TalkIME — Type with your voice, anywhere</title>
-<meta name="description" content="TalkIME turns your voice into text wherever your cursor is. Hold Alt+Z, speak, release — it types for you. Works in any app on Windows.">
-<meta property="og:title" content="TalkIME — Type with your voice">
-<meta property="og:description" content="Hold Alt+Z, speak, release. TalkIME types for you in any app on Windows.">
+<title>TalkIME — Windows 全局 AI 语音输入</title>
+<meta name="description" content="TalkIME 是 Windows 全局 AI 语音输入工具。按住 Alt+Z 说话，结合当前语境纠正同音词，再把文字插入任意应用的光标处。">
+<meta property="og:title" content="TalkIME — Windows 全局 AI 语音输入">
+<meta property="og:description" content="按住 Alt+Z 说话，松开生成，空格插入。无需替换现有输入法。">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23f4f4fb'/%3E%3Cg transform='translate(106,86) scale(0.520833)'%3E%3Cpath fill='%236a5cff' d='M291.2 388.4c31.2-18.8 64.7-36.4 101.1-36.4l55.7 0c4.6 0 9.1-.2 13.6-.7l85.3 121.9c4 5.7 11.3 8.2 17.9 6.1s11.2-8.3 11.2-15.3l0-240c0-70.7-57.3-128-128-128l-55.7 0c-36.4 0-69.9-17.6-101.1-36.4C262.3 42.1 228.3 32 192 32C86 32 0 118 0 224c0 71.1 38.6 133.1 96 166.3L96 456c0 13.3 10.7 24 24 24s24-10.7 24-24l0-46c15.3 3.9 31.4 6 48 6c5.4 0 10.7-.2 16-.7l0 40.7c0 13.3 10.7 24 24 24s24-10.7 24-24l0-50.9c12.4-4.4 24.2-10 35.2-16.7zM448 200a24 24 0 1 1 0 48 24 24 0 1 1 0-48z'/%3E%3C/g%3E%3C/svg%3E">
 <style>
@@ -269,74 +269,109 @@
       </span>
       TalkIME
     </div>
-    <a class="nav-cta" href="#download">Download</a>
+    <a class="nav-cta" href="#download">免费试用</a>
   </div>
 </nav>
 
 <!-- ── Hero ── -->
 <header>
   <div class="wrap">
-    <span class="badge"><span class="pulse"></span> Voice-to-text for Windows</span>
-    <h1>Type with <span class="grad">your voice.</span><br>Anywhere your cursor is.</h1>
-    <p class="sub">The fastest, most accurate voice input for Windows — it understands what you mean, fixes itself when you speak, and learns the words that are uniquely yours.</p>
+    <span class="badge"><span class="pulse"></span> Windows 全局 AI 语音输入</span>
+    <h1>按住 <span class="grad">Alt+Z</span><br>说完，文字就在光标处。</h1>
+    <p class="sub">不用换输入法。TalkIME 在 Cursor、Claude Code、Word、浏览器等任意输入框里，把口述整理成可直接使用的中文。</p>
+
+    <div class="keys" aria-label="快捷键操作说明">
+      <span class="key">Alt</span>
+      <span class="key-plus">+</span>
+      <span class="key accent">Z</span>
+      <span class="key-hint">按住说话 · 松开生成 · 空格插入</span>
+    </div>
 
     <div class="cta-row" id="download">
       <a class="btn btn-primary" id="dl-btn" href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-        Download for Windows
+        下载 Windows 版
       </a>
     </div>
-    <div class="dl-meta">Free 3-day trial · Windows 10/11 · ~29 MB · No admin rights needed</div>
+    <div class="dl-meta">免费试用 3 天 · Windows 10/11 · 约 29 MB · 无需管理员权限</div>
 
     <div class="trust">
       <div class="trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Fast &amp; accurate transcription
+        与搜狗、微信、双拼、五笔共存
       </div>
       <div class="trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        Works in every app on your PC
+        结合当前语境纠正同音专业词
       </div>
       <div class="trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Private by design — nothing stored or sent
+        屏幕语境默认关闭，可随时控制
       </div>
     </div>
   </div>
 </header>
 
+<!-- ── First run ── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">第一次输入</div>
+      <h2>安装后，只要三步。</h2>
+      <p>完成 Microsoft 账号登录后，不需要切换应用，也不需要替换你原来的输入法。</p>
+    </div>
+    <div class="features reveal">
+      <article class="card">
+        <span class="feat-num">1</span>
+        <h3>把光标放进输入框</h3>
+        <p>Cursor、Claude Code、Word、微信、浏览器——只要能打字的地方都可以。</p>
+      </article>
+      <article class="card">
+        <span class="feat-num">2</span>
+        <h3>按住 Alt+Z 说话</h3>
+        <p>按住开始录音，松开结束。TalkIME 会显示原文、语境修正稿和表达优化稿。</p>
+      </article>
+      <article class="card">
+        <span class="feat-num">3</span>
+        <h3>按空格插入文字</h3>
+        <p>按 Tab 切换版本，按空格确认并插入，按 Esc 放弃。结果不会在你确认前擅自写入。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ── Features ── -->
 <section>
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="eyebrow">Why TalkIME</div>
-      <h2>Not just voice typing.<br>Voice that understands you.</h2>
-      <p>Four things that set TalkIME apart from every other dictation tool.</p>
+      <div class="eyebrow">为什么是 TalkIME</div>
+      <h2>不只是听写。<br>它会理解你正在做什么。</h2>
+      <p>重点不是把声音变成字，而是让这段文字可以直接进入你的工作。</p>
     </div>
 
     <!-- 1 · Accuracy & speed -->
     <div class="feat-row reveal">
       <div class="feat-text">
         <span class="feat-num">1</span>
-        <div class="feat-eyebrow">Accuracy &amp; speed</div>
-        <h3>High accuracy. Instant response.</h3>
-        <p>Streaming recognition transcribes <span class="em">while you speak</span> and an AI editor cleans it up on the fly — so accurate, polished text lands the moment you stop talking. No lag, no fixing typos afterward.</p>
+        <div class="feat-eyebrow">优化表达</div>
+        <h3>边说边识别，停口即得干净稿。</h3>
+        <p>流式识别在你说话时就开始处理。结果卡保留<span class="em">纯原文、语境修正稿和表达优化稿</span>，你可以按 Tab 切换后再决定插入哪一版。</p>
       </div>
       <figure class="feat-media auto">
         <div class="compare">
           <div class="cmp bad">
             <div class="cmp-tag">
               <span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
-              Ordinary IME — can't tell what you mean
+              普通语音输入——只听声音，不懂语境
             </div>
-            <img src="images/1-1.png" alt="An ordinary input method fails to recognize the intended words and shows wrong candidates">
+            <img src="images/1-1.png" alt="普通语音输入无法理解当前语境，给出错误的同音词">
           </div>
           <div class="cmp good">
             <div class="cmp-tag">
               <span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
-              TalkIME — recognizes exactly what you meant
+              TalkIME——结合语境判断你真正想说的词
             </div>
-            <img src="images/1-2.png" alt="TalkIME correctly recognizes the intended words from speech">
+            <img src="images/1-2.png" alt="TalkIME 结合当前语境识别出用户真正想说的词">
           </div>
         </div>
       </figure>
@@ -346,13 +381,13 @@
     <div class="feat-row rev reveal">
       <div class="feat-text">
         <span class="feat-num">2</span>
-        <div class="feat-eyebrow">Voice correction</div>
-        <h3>Wrong word? Just say how to fix it.</h3>
-        <p>Never touch the keyboard. Hold the key again and <span class="em">describe the change in plain words</span> — “change Zhang San to Zhang Shan,” “make that a question” — exactly like talking to a person. TalkIME understands and rewrites it for you.</p>
+        <div class="feat-eyebrow">语音改字</div>
+        <h3>改错，不必摸回键盘。</h3>
+        <p>结果卡还在时，再按住 Alt+Z，直接说<span class="em">“把张三改成张善”“这句改成疑问句”</span>。一次不满意可以继续说，直到结果符合你的意思。</p>
       </div>
       <figure class="feat-media auto">
         <div class="shot">
-          <img src="images/2.png" alt="Speaking a plain-language instruction to fix a wrong character in the transcript, and TalkIME rewrites it">
+          <img src="images/2.png" alt="用户用自然语言口述修改指令，TalkIME 据此改正转写结果">
         </div>
       </figure>
     </div>
@@ -361,13 +396,13 @@
     <div class="feat-row reveal">
       <div class="feat-text">
         <span class="feat-num">3</span>
-        <div class="feat-eyebrow">Personal glossary</div>
-        <h3>Your words, spelled right every time.</h3>
-        <p>TalkIME analyzes how you correct your own transcripts and <span class="em">automatically builds a personal glossary</span> of the names, jargon, and product terms you use. Once learned, the words that are uniquely yours are never mistyped again.</p>
+        <div class="feat-eyebrow">个人词库</div>
+        <h3>每次纠错，都能变成下一次的词典。</h3>
+        <p>TalkIME 在本机保存你确认过的纠错记录。你可以在词库页<span class="em">审核并生成专属词条</span>，也可以手动添加或删除人名、术语和产品名。</p>
       </div>
       <figure class="feat-media auto">
         <div class="shot">
-          <img src="images/3.png" alt="The Glossary panel showing a personal term automatically learned from past corrections">
+          <img src="images/3.png" alt="TalkIME 个人词库页面，展示从纠错记录中生成并可由用户管理的专属词条">
         </div>
       </figure>
     </div>
@@ -376,13 +411,13 @@
     <div class="feat-row rev reveal">
       <div class="feat-text">
         <span class="feat-num">4</span>
-        <div class="feat-eyebrow">Context awareness</div>
-        <h3>Understands what you actually mean.</h3>
-        <p>TalkIME grasps the context of what you're working on to <span class="em">get the words right</span> — catching mistakes that fit the sentence and recognizing niche terms that ordinary speech models miss. It's smart where it counts, and everything is processed <span class="em">on your device</span>.</p>
+        <div class="feat-eyebrow">上下文感知</div>
+        <h3>看懂语境，才写对你真正想说的词。</h3>
+        <p>TalkIME 可结合光标前文字与当前窗口可见内容，把“木把 / 误把”消歧成语境里的<span class="em">“钼靶”</span>。光标前文默认开启，屏幕语境默认关闭；这些上下文会发送到云端模型用于本次处理。TalkIME 的运营埋点不记录转写正文、词条或屏幕内容。</p>
       </div>
       <figure class="feat-media auto">
         <div class="shot">
-          <img src="images/4.png" alt="With screen context on, ambiguous transcriptions like 木把 / 误把 are fused into the correct term 钼靶">
+          <img src="images/4.png" alt="开启屏幕语境后，TalkIME 将木把或误把等歧义转写修正为医学术语钼靶">
         </div>
       </figure>
     </div>
@@ -392,15 +427,15 @@
 <!-- ── Final CTA ── -->
 <section>
   <div class="final reveal">
-    <h2>Stop typing. Start talking.</h2>
-    <p>Try TalkIME free for 3 days. Installs in seconds, runs in your tray, and works in every app you already use.</p>
+    <h2>少打字，先说一段试试。</h2>
+    <p>免费试用 3 天。安装后把光标放进任意输入框，按住 Alt+Z 说话，松开后按空格插入。</p>
     <div class="cta-row">
       <a class="btn btn-primary" id="dl-btn-2" href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-        Download for Windows
+        下载 Windows 版
       </a>
     </div>
-    <div class="dl-meta">Free 3-day trial · Windows 10/11 · ~29 MB</div>
+    <div class="dl-meta">免费试用 3 天 · Windows 10/11 · 约 29 MB</div>
   </div>
 </section>
 
@@ -414,7 +449,7 @@
       TalkIME
     </div>
     <div class="foot-links">
-      <a href="#download">Download</a>
+      <a href="#download">下载 Windows 版</a>
     </div>
     <p class="attribution">
       Kiwi bird icon by <a href="https://fontawesome.com/" target="_blank" rel="noopener">Font Awesome</a>,
@@ -425,7 +460,7 @@
 </footer>
 
 <script>
-  // Single source of truth for the installer link.
+  // 安装包链接的唯一配置入口。
   var DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.1/TalkIME-Setup-1.0.1.exe";
   document.querySelectorAll('#dl-btn, #dl-btn-2').forEach(function(el){ el.setAttribute('href', DOWNLOAD_URL); });
 
