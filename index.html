@@ -277,7 +277,7 @@
       </span>
       TalkIME
     </div>
-    <a class="nav-cta" href="#download">免费试用</a>
+    <a class="nav-cta" href="#download">免费下载</a>
   </div>
 </nav>
 
@@ -304,7 +304,7 @@
         GitHub 备用下载
       </a>
     </div>
-    <div class="dl-meta">免费试用 3 天 · Windows 10/11 · 约 29 MB · 无需管理员权限</div>
+    <div class="dl-meta">当前免费使用 · Windows 10/11 · 约 29 MB · 无需管理员权限</div>
 
     <div class="trust">
       <div class="trust-item">
@@ -439,7 +439,7 @@
 <section>
   <div class="final reveal">
     <h2>少打字，先说一段试试。</h2>
-    <p>免费试用 3 天。安装后把光标放进任意输入框，按住 Alt+Z 说话，松开后按空格插入。</p>
+    <p>当前免费使用。安装后把光标放进任意输入框，按住 Alt+Z 说话，松开后按空格插入。</p>
     <div class="cta-row">
       <a class="btn btn-primary" id="dl-btn-2" href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
@@ -449,7 +449,7 @@
         GitHub 备用下载
       </a>
     </div>
-    <div class="dl-meta">免费试用 3 天 · Windows 10/11 · 约 29 MB</div>
+    <div class="dl-meta">当前免费使用 · Windows 10/11 · 约 29 MB</div>
   </div>
 </section>
 
@@ -476,8 +476,8 @@
 
 <script>
   // 安装包链接的唯一配置入口：国内 COS 为主，GitHub 为备用。
-  var COS_DOWNLOAD_URL = "https://talkime-releases-1321205788.cos.ap-beijing.myqcloud.com/releases/v1.0.3/TalkIME-Setup-1.0.3.exe";
-  var GITHUB_DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.3/TalkIME-Setup-1.0.3.exe";
+  var COS_DOWNLOAD_URL = "https://talkime-releases-1321205788.cos.ap-beijing.myqcloud.com/releases/v1.0.4/TalkIME-Setup-1.0.4.exe";
+  var GITHUB_DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.4/TalkIME-Setup-1.0.4.exe";
   document.querySelectorAll('#dl-btn, #dl-btn-2').forEach(function(el){ el.setAttribute('href', COS_DOWNLOAD_URL); });
   document.querySelectorAll('#dl-github, #dl-github-2').forEach(function(el){ el.setAttribute('href', GITHUB_DOWNLOAD_URL); });
 
@@ -491,7 +491,8 @@
   if(document.referrer){
     try{ referrerHost = new URL(document.referrer).hostname || 'direct'; }catch(e){}
   }
-  window.clarity('set', 'release_version', '1.0.3');
+  window.clarity('set', 'release_version', '1.0.4');
+  window.clarity('set', 'pricing_mode', 'free');
   window.clarity('set', 'referrer_host', referrerHost.slice(0, 100));
   window.clarity('event', 'landing_page_view');
 
@@ -499,7 +500,7 @@
     var el = document.querySelector(selector);
     if(el){ el.addEventListener('click', function(){ window.clarity('event', eventName); }); }
   }
-  trackClick('.nav-cta', 'nav_free_trial_click');
+  trackClick('.nav-cta', 'nav_free_download_click');
   trackClick('#dl-btn', 'download_click_cos_hero');
   trackClick('#dl-github', 'download_click_github_hero');
   trackClick('#dl-btn-2', 'download_click_cos_bottom');
