@@ -476,8 +476,8 @@
 
 <script>
   // 安装包链接的唯一配置入口：国内 COS 为主，GitHub 为备用。
-  var COS_DOWNLOAD_URL = "https://talkime-releases-1321205788.cos.ap-beijing.myqcloud.com/releases/v1.0.4/TalkIME-Setup-1.0.4.exe";
-  var GITHUB_DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.4/TalkIME-Setup-1.0.4.exe";
+  var COS_DOWNLOAD_URL = "https://talkime-releases-1321205788.cos.ap-beijing.myqcloud.com/releases/v1.0.5/TalkIME-Setup-1.0.5.exe";
+  var GITHUB_DOWNLOAD_URL = "https://github.com/YanaYuan/TalkIME-releases/releases/download/v1.0.5/TalkIME-Setup-1.0.5.exe";
   document.querySelectorAll('#dl-btn, #dl-btn-2').forEach(function(el){ el.setAttribute('href', COS_DOWNLOAD_URL); });
   document.querySelectorAll('#dl-github, #dl-github-2').forEach(function(el){ el.setAttribute('href', GITHUB_DOWNLOAD_URL); });
 
@@ -491,7 +491,7 @@
   if(document.referrer){
     try{ referrerHost = new URL(document.referrer).hostname || 'direct'; }catch(e){}
   }
-  window.clarity('set', 'release_version', '1.0.4');
+  window.clarity('set', 'release_version', '1.0.5');
   window.clarity('set', 'pricing_mode', 'free');
   window.clarity('set', 'referrer_host', referrerHost.slice(0, 100));
   window.clarity('event', 'landing_page_view');
