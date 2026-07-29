@@ -30,6 +30,7 @@
     --accent:#7c8aff;
     --accent-2:#6a5cff;
     --accent-soft:rgba(124,138,255,.12);
+    --wechat:#07c160;
     --radius:16px;
     --maxw:1080px;
   }
@@ -213,6 +214,37 @@
   .feat-ph svg{width:42px;height:42px;color:var(--accent);opacity:.75}
   .feat-ph span{font-size:13px;letter-spacing:.02em}
 
+  /* ── Ask the author (WeChat) ── */
+  .helpline{margin-top:22px;text-align:center}
+  .helpline-btn{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    padding:8px 15px;border-radius:9px;font-size:13.5px;color:var(--text-2);
+    background:none;border:1px solid transparent;font:inherit;font-size:13.5px;
+    transition:color .15s,background .15s,border-color .15s;
+  }
+  .helpline-btn:hover{color:var(--text);background:rgba(255,255,255,.035);border-color:var(--stroke)}
+  .helpline-btn .wx{width:17px;height:17px;color:var(--wechat);flex-shrink:0}
+  .helpline-btn .caret{width:11px;height:11px;color:var(--text-3);transition:transform .2s}
+  .helpline.open .caret{transform:rotate(180deg)}
+  .helpline-panel{max-height:0;overflow:hidden;transition:max-height .35s ease}
+  .helpline.open .helpline-panel{max-height:460px}
+  .qr-card{
+    display:inline-flex;align-items:center;gap:20px;margin-top:14px;
+    padding:18px 22px;border-radius:16px;text-align:left;
+    background:var(--panel);border:1px solid var(--stroke);
+  }
+  .qr-card img{width:118px;height:118px;border-radius:10px;background:#fff;padding:7px;flex-shrink:0}
+  .qr-card .t{font-size:14.5px;font-weight:650;margin-bottom:6px}
+  .qr-card .d{font-size:13px;color:var(--text-2);max-width:300px;line-height:1.65}
+  .wxid{
+    display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:5px 10px;
+    border-radius:7px;background:var(--panel-2);border:1px solid var(--stroke);
+    font-size:12.5px;color:var(--text-2);cursor:pointer;
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+  .wxid:hover{color:var(--text);border-color:#3a3a4c}
+  .wxid svg{width:12px;height:12px}
+
   /* ── Final CTA ── */
   .final{
     text-align:center;padding:64px 40px;margin:0 24px;
@@ -257,6 +289,8 @@
     .keys{flex-wrap:wrap;justify-content:center}
     .key-hint{margin-left:0;width:100%;text-align:center}
     .final{padding:48px 22px;margin:0 16px}
+    .qr-card{flex-direction:column;text-align:center;gap:14px}
+    .qr-card .d{max-width:none}
   }
   @media(prefers-reduced-motion:reduce){
     .reveal{opacity:1;transform:none;transition:none}
@@ -306,15 +340,28 @@
     </div>
     <div class="dl-meta">当前免费使用 · Windows 10/11 · 约 29 MB · 无需管理员权限</div>
 
+    <div class="helpline" id="wx-help">
+      <button class="helpline-btn" id="wx-toggle" type="button" aria-expanded="false" aria-controls="wx-panel">
+        <svg class="wx" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.7 3C4.9 3 1.8 5.6 1.8 8.8c0 1.8 1 3.4 2.6 4.5l-.7 2 2.3-1.2c.8.2 1.6.3 2.4.3h.6a5 5 0 0 1-.2-1.4c0-3 2.9-5.4 6.4-5.4h.6C15.2 5.1 12.3 3 8.7 3zM6.4 7.6a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zm4.6 0a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8zM22.2 13c0-2.7-2.7-4.9-5.9-4.9s-5.9 2.2-5.9 4.9 2.7 4.9 5.9 4.9c.7 0 1.4-.1 2-.3l1.9 1-.5-1.7c1.5-.9 2.5-2.3 2.5-3.9zm-7.8-.9a.8.8 0 1 1 0-1.5.8.8 0 0 1 0 1.5zm3.9 0a.8.8 0 1 1 0-1.5.8.8 0 0 1 0 1.5z"/></svg>
+        装不上、或者说了没出字？加我微信
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="helpline-panel" id="wx-panel">
+        <div class="qr-card">
+          <img src="images/wechat_qr.png" alt="TalkIME 作者微信二维码" width="118" height="118" loading="lazy">
+          <div>
+            <div class="t">我是 TalkIME 的作者，扫码直接问我</div>
+            <div class="d">安装包没做签名，Windows 或杀毒软件偶尔会把它删掉；登录卡住、说了半天没出字，也都跟我说一声。</div>
+            <span class="wxid" id="wx-copy" role="button" tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>
+              微信号 reasonair　<span id="wx-copy-label">点击复制</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="trust">
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        与搜狗、微信、双拼、五笔共存
-      </div>
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        结合当前语境纠正同音专业词
-      </div>
       <div class="trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         屏幕语境默认开启，可随时关闭
@@ -505,6 +552,33 @@
   trackClick('#dl-github', 'download_click_github_hero');
   trackClick('#dl-btn-2', 'download_click_cos_bottom');
   trackClick('#dl-github-2', 'download_click_github_bottom');
+
+  // 作者微信入口：展开与复制微信号，只上报动作名，不记录任何访客标识。
+  var wxHelp = document.getElementById('wx-help');
+  var wxToggle = document.getElementById('wx-toggle');
+  if(wxHelp && wxToggle){
+    wxToggle.addEventListener('click', function(){
+      var opened = wxHelp.classList.toggle('open');
+      wxToggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+      if(opened){ window.clarity('event', 'wechat_help_open'); }
+    });
+  }
+  var wxCopy = document.getElementById('wx-copy');
+  var wxCopyLabel = document.getElementById('wx-copy-label');
+  if(wxCopy && wxCopyLabel){
+    var copyWechatId = function(){
+      if(!navigator.clipboard){ return; }
+      navigator.clipboard.writeText('reasonair').then(function(){
+        wxCopyLabel.textContent = '已复制';
+        window.clarity('event', 'wechat_id_copy');
+        setTimeout(function(){ wxCopyLabel.textContent = '点击复制'; }, 2000);
+      }).catch(function(){});
+    };
+    wxCopy.addEventListener('click', copyWechatId);
+    wxCopy.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); copyWechatId(); }
+    });
+  }
 
   // Reveal-on-scroll
   var io = new IntersectionObserver(function(entries){
