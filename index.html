@@ -102,21 +102,6 @@
     max-width:600px;margin:0 auto 20px;font-weight:400;
   }
 
-  /* ── Keycaps ── */
-  .keys{
-    display:inline-flex;align-items:center;gap:10px;margin:8px 0 34px;
-    padding:14px 22px;border-radius:14px;
-    background:var(--panel);border:1px solid var(--stroke);
-  }
-  .key{
-    background:var(--panel-2);border:1px solid #33334a;border-bottom:3px solid #14141e;
-    border-radius:9px;padding:9px 18px;font-size:15px;font-weight:700;min-width:56px;
-    text-align:center;color:var(--text);letter-spacing:.02em;
-  }
-  .key.accent{color:var(--accent);background:var(--accent-soft);border-color:rgba(124,138,255,.4);border-bottom-color:rgba(124,138,255,.2)}
-  .key-plus{color:var(--text-3);font-size:16px}
-  .key-hint{color:var(--text-3);font-size:13px;margin-left:8px}
-
   /* ── CTA buttons ── */
   .cta-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center}
   .btn{
@@ -134,11 +119,6 @@
   .btn-ghost:hover{background:var(--panel-2);border-color:#3a3a4e}
   .btn svg{width:18px;height:18px}
   .dl-meta{margin-top:16px;font-size:12.5px;color:var(--text-3)}
-
-  /* ── Trust bar ── */
-  .trust{display:flex;gap:28px;justify-content:center;flex-wrap:wrap;margin-top:44px}
-  .trust-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text-2)}
-  .trust-item svg{width:16px;height:16px;color:var(--accent)}
 
   /* ── Section ── */
   section{padding:72px 0}
@@ -286,8 +266,6 @@
   }
   @media(max-width:620px){
     .features{grid-template-columns:1fr}
-    .keys{flex-wrap:wrap;justify-content:center}
-    .key-hint{margin-left:0;width:100%;text-align:center}
     .final{padding:48px 22px;margin:0 16px}
     .qr-card{flex-direction:column;text-align:center;gap:14px}
     .qr-card .d{max-width:none}
@@ -322,13 +300,6 @@
     <h1>按住 <span class="grad">Alt+Z</span><br>说完，文字就在光标处。</h1>
     <p class="sub">不用换输入法。TalkIME 在 Cursor、Claude Code、Word、浏览器等任意输入框里，把口述整理成可直接使用的中文。</p>
 
-    <div class="keys" aria-label="快捷键操作说明">
-      <span class="key">Alt</span>
-      <span class="key-plus">+</span>
-      <span class="key accent">Z</span>
-      <span class="key-hint">按住说话 · 松开生成 · 空格插入</span>
-    </div>
-
     <div class="cta-row" id="download">
       <a class="btn btn-primary" id="dl-btn" href="#">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
@@ -338,7 +309,6 @@
         GitHub 备用下载
       </a>
     </div>
-    <div class="dl-meta">当前免费使用 · Windows 10/11 · 约 29 MB · 无需管理员权限</div>
 
     <div class="helpline" id="wx-help">
       <button class="helpline-btn" id="wx-toggle" type="button" aria-expanded="false" aria-controls="wx-panel">
@@ -358,13 +328,6 @@
             </span>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="trust">
-      <div class="trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        屏幕语境默认开启，可随时关闭
       </div>
     </div>
   </div>
