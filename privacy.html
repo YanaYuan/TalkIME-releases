@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TalkIME 隐私政策 | Privacy Policy</title>
+<meta name="description" content="TalkIME 隐私政策：说明语音、屏幕语境、账号、诊断日志和使用统计如何处理。">
+<style>
+  :root{
+    --bg:#0f0f14;
+    --panel:#191920;
+    --stroke:#2a2a38;
+    --text:#ececf1;
+    --muted:#aaaab8;
+    --subtle:#777788;
+    --accent:#8d98ff;
+    --accent-soft:rgba(124,138,255,.12);
+    --warning:#f0bd66;
+    --warning-soft:rgba(240,189,102,.1);
+    --maxw:900px;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:86px}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI","Microsoft YaHei UI",system-ui,sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-underline-offset:3px}
+  a:hover{color:#b3baff}
+  nav{
+    position:sticky;top:0;z-index:10;
+    background:rgba(15,15,20,.9);backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .nav-inner{
+    max-width:var(--maxw);height:64px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:750}
+  .brand-mark{
+    width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+    color:#fff;background:linear-gradient(135deg,#7c8aff,#5f52e9);font-weight:850;
+  }
+  .back{color:var(--muted);font-size:14px;text-decoration:none}
+  main{max-width:var(--maxw);margin:0 auto;padding:70px 24px 96px}
+  .hero{padding-bottom:46px;border-bottom:1px solid var(--stroke)}
+  .eyebrow{color:var(--accent);font-size:13px;font-weight:750;letter-spacing:.08em;text-transform:uppercase}
+  h1{margin:12px 0 14px;font-size:clamp(38px,7vw,58px);line-height:1.08;letter-spacing:0}
+  .lead{max-width:720px;margin:0;color:var(--muted);font-size:18px}
+  .meta{margin-top:20px;color:var(--subtle);font-size:13px}
+  .language-links{display:flex;gap:16px;flex-wrap:wrap;margin-top:26px;font-size:14px}
+  .notice{
+    margin:34px 0 0;padding:20px 22px;border:1px solid rgba(240,189,102,.42);
+    border-left:4px solid var(--warning);background:var(--warning-soft);border-radius:6px;
+  }
+  .notice strong{color:#ffd999}
+  .notice p{margin:6px 0 0;color:#d8c39d}
+  article{padding-top:18px}
+  section{padding:34px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  h2{margin:0 0 16px;font-size:25px;line-height:1.3;letter-spacing:0}
+  h3{margin:24px 0 8px;font-size:17px;line-height:1.4}
+  p{margin:10px 0;color:var(--muted)}
+  ul{margin:10px 0;padding-left:22px;color:var(--muted)}
+  li{margin:8px 0;padding-left:4px}
+  strong{color:var(--text)}
+  code{padding:2px 6px;border-radius:5px;background:var(--panel);color:#c8ccff;font-family:Consolas,monospace;font-size:.92em}
+  .toc{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px;
+    margin:22px 0 4px;padding:20px 22px;background:var(--panel);border:1px solid var(--stroke);border-radius:8px;
+  }
+  .toc a{font-size:14px;text-decoration:none}
+  .english{padding-top:58px}
+  .english > h2{font-size:34px}
+  footer{padding:34px 24px;text-align:center;color:var(--subtle);font-size:13px}
+  @media(max-width:640px){
+    main{padding:48px 20px 72px}.nav-inner{padding:0 20px}.toc{grid-template-columns:1fr}
+    .lead{font-size:16px}.notice{padding:18px}.back{font-size:13px}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark">T</span><span>TalkIME</span></a>
+    <a class="back" href="index.html">返回下载页</a>
+  </div>
+</nav>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Privacy</div>
+    <h1>隐私政策</h1>
+    <p class="lead">这份政策说明 TalkIME 在提供 Windows 语音输入服务时会处理哪些数据、数据流向哪里，以及你可以如何控制或删除这些数据。</p>
+    <p class="meta">生效及最后更新日期：2026 年 8 月 23 日</p>
+    <div class="language-links">
+      <a href="#zh">中文</a>
+      <a href="#en">English</a>
+    </div>
+    <div class="notice">
+      <strong>当前传输安全说明</strong>
+      <p>当前桌面客户端连接 TalkIME 后端时使用 HTTP，尚未启用 HTTPS。Microsoft 登录令牌、应用会话令牌、语音音频和启用的上下文会经过这段连接。Microsoft 与火山引擎自身的后续连接使用 HTTPS/WSS。迁移完成前，请不要用 TalkIME 处理密码、支付信息、医疗记录等高度敏感内容。</p>
+    </div>
+  </header>
+
+  <article id="zh">
+    <section>
+      <h2>目录</h2>
+      <div class="toc">
+        <a href="#zh-scope">1. 适用范围</a>
+        <a href="#zh-data">2. 我们处理的数据</a>
+        <a href="#zh-use">3. 使用目的</a>
+        <a href="#zh-providers">4. 服务提供方</a>
+        <a href="#zh-retention">5. 保存与删除</a>
+        <a href="#zh-controls">6. 你的选择</a>
+        <a href="#zh-security">7. 安全</a>
+        <a href="#zh-contact">8. 联系我们</a>
+      </div>
+    </section>
+
+    <section id="zh-scope">
+      <h2>1. 适用范围</h2>
+      <p>本政策适用于 TalkIME Windows 桌面应用、TalkIME 后端服务、下载页和安装包下载。TalkIME 由个人开发者 <strong>Yana Yuan</strong> 提供。</p>
+      <p>我们不出售个人数据，也不使用应用内数据投放广告。</p>
+    </section>
+
+    <section id="zh-data">
+      <h2>2. 我们处理的数据</h2>
+
+      <h3>2.1 Microsoft 账号与登录</h3>
+      <p>登录通过 Microsoft 身份平台完成。TalkIME 接收并保存 Microsoft 账号对象 ID、电子邮箱、显示名称、订阅或使用资格，以及 TalkIME 应用会话令牌。本地副本保存在 <code>%LOCALAPPDATA%\TalkIME\account.json</code>；账号资料和资格状态也保存在 TalkIME 后端数据库。</p>
+      <p>应用会话令牌目前没有自动到期时间。本地“退出登录”会删除本机保存的令牌，但不会自动删除后端账号、统计记录或备份。</p>
+
+      <h3>2.2 语音和生成内容</h3>
+      <p>只有在你主动开始一次听写或语音修改时，TalkIME 才采集麦克风音频。音频经 TalkIME 后端转发给火山引擎豆包语音识别。识别文本、候选文本、语音修改要求和待修改文本会在需要时发送给豆包大模型，以完成纠错、润色、格式整理、语音改字或个人词库生成。</p>
+      <p>TalkIME 后端数据库不保存原始音频、完整提示词或完整模型结果；这些内容会在请求期间进入服务内存并被上游服务处理。火山引擎对请求数据的处理同时受其服务条款和隐私规则约束。</p>
+
+      <h3>2.3 光标前文、屏幕语境和本地 OCR</h3>
+      <p><strong>光标前文和屏幕语境默认开启</strong>，可以在设置中分别关闭。启用后，应用会读取当前前台窗口中的相关文字，并将其随本次识别文本发送给豆包大模型，用于同音词、专业词和语境纠错。TalkIME 不会持续后台上传屏幕；上下文读取只在一次听写触发后发生。</p>
+      <p>微信无法提供可用的界面文字时，TalkIME 可在本机截取当前微信窗口并使用 Windows OCR 或 PP-OCRv6 Tiny 识别。截图写入临时目录并在该次 OCR 完成后删除，截图本身不会上传；如果屏幕语境开启，识别出的文字仍会作为本次上下文发送给云端大模型。PowerPoint 正常编辑模式的当前幻灯片文字可通过本机 COM 接口读取。</p>
+
+      <h3>2.4 本机个性化数据和历史</h3>
+      <p>设置、表达偏好、个人词库、修改历史、候选选择历史、匿名安装 ID、待发送统计事件和诊断日志保存在 <code>%LOCALAPPDATA%\TalkIME</code>。修改历史和候选选择历史包含用户口述、候选或修改后的完整文字；表达偏好和个人词库会在相关云端请求中使用。</p>
+
+      <h3>2.5 使用统计</h3>
+      <p>使用统计默认开启，可在设置中关闭。统计包含随机安装 ID、每次启动生成的会话 ID、Microsoft 账号对应的 TalkIME 用户 ID、客户端版本、事件时间，以及功能状态、耗时、字符数、结果选择、失败阶段等数值或枚举字段。运营统计事件不包含转写正文、个人词条或屏幕正文。登录前的少量启动和登录事件会先与随机安装 ID 关联，登录成功后可与账号关联。</p>
+
+      <h3>2.6 诊断日志</h3>
+      <p>客户端滚动诊断日志可能包含完整的识别文本、候选文本、修改要求和修改结果。单个日志文件上限约 3 MB，并保留 3 个备份，合计约 12 MB。后端滚动日志会记录性能和错误信息，并可能包含识别结果的前 30 个字符；文件日志按 5 MB 轮转并保留 5 个备份，部分内容也可能由服务器系统日志保留。</p>
+
+      <h3>2.7 网站和下载记录</h3>
+      <p>下载页使用 Microsoft Clarity 的 consent-denied 模式记录页面访问、来源域名、UTM 参数、版本和按钮点击等交互，不设置持久 Cookie 访客标识。GitHub Pages、GitHub Releases、腾讯云 COS 和相关网络服务仍可能处理 IP 地址、浏览器信息、请求路径、来源页、响应大小和时间。TalkIME 已启用 COS 访问日志，用于下载量、安全和故障分析。</p>
+    </section>
+
+    <section id="zh-use">
+      <h2>3. 使用目的</h2>
+      <ul>
+        <li>验证登录并提供账号和使用资格；</li>
+        <li>完成语音识别、语境纠错、润色、格式整理和语音修改；</li>
+        <li>保存用户选择的设置、词库、表达偏好和修改历史；</li>
+        <li>计算用量、限制滥用、排查故障并维护服务安全；</li>
+        <li>分析安装、登录、听写和结果采用情况，改进产品；</li>
+        <li>提供安装包、判断版本更新并分析下载可靠性。</li>
+      </ul>
+    </section>
+
+    <section id="zh-providers">
+      <h2>4. 服务提供方和数据流向</h2>
+      <ul>
+        <li><strong>Microsoft</strong>：账号登录；下载页上的 Microsoft Clarity 访问与交互分析。</li>
+        <li><strong>火山引擎 / 豆包</strong>：云端语音识别和大模型文本处理。</li>
+        <li><strong>腾讯云</strong>：TalkIME 后端基础设施、安装包分发和下载访问日志。</li>
+        <li><strong>GitHub</strong>：公开下载页和备用安装包分发。</li>
+      </ul>
+      <p>这些提供方会按照各自条款处理数据，处理地点可能包括中国大陆及其所使用的其他服务区域。本机 Windows OCR、PP-OCRv6 Tiny 和 PowerPoint COM 处理本身不需要把截图或 Office 文档发送给这些提供方，但随后用于云端纠错的识别文字属于云端请求内容。</p>
+    </section>
+
+    <section id="zh-retention">
+      <h2>5. 保存与删除</h2>
+      <ul>
+        <li><strong>本机数据：</strong>设置、历史、词库和安装 ID 当前没有自动到期时间。卸载应用后，<code>%LOCALAPPDATA%\TalkIME</code> 仍可能保留；可手动删除该目录。</li>
+        <li><strong>临时截图：</strong>微信 OCR 截图在单次处理结束时随临时目录删除。</li>
+        <li><strong>客户端日志：</strong>按约 12 MB 的滚动上限覆盖旧日志，也可通过删除本机数据目录立即清除。</li>
+        <li><strong>后端账号、统计和用量：</strong>当前没有自动到期或自助删除接口，会保留至不再提供服务、运营上不再需要，或完成经验证的删除请求。</li>
+        <li><strong>后端与下载访问日志：</strong>文件日志按大小轮转；服务器系统日志、COS 访问日志和备份目前没有统一的自动到期时间，可能保留到人工清理或完成适用的删除请求。</li>
+        <li><strong>云端请求：</strong>TalkIME 不在应用数据库中保存原始音频和完整模型请求；上游提供方的暂存或保留受其政策约束。</li>
+      </ul>
+    </section>
+
+    <section id="zh-controls">
+      <h2>6. 你的选择</h2>
+      <ul>
+        <li>在设置中分别关闭光标前文、屏幕语境、增强屏幕识别和使用统计；</li>
+        <li>删除修改历史或个人词库；</li>
+        <li>退出登录，删除本机保存的应用会话令牌；</li>
+        <li>删除 <code>%LOCALAPPDATA%\TalkIME</code>，清除本机账号缓存、设置、历史、词库、安装 ID 和日志；</li>
+        <li>通过本政策末尾的联系方式申请查看、更正或删除后端账号及相关记录。我们可能需要先验证账号归属，并会说明因安全、法律义务或备份限制无法立即删除的部分。</li>
+      </ul>
+    </section>
+
+    <section id="zh-security">
+      <h2>7. 安全</h2>
+      <p>我们通过访问控制、请求鉴权、用量限制和日志轮转等措施降低风险。但没有任何系统可以保证绝对安全。当前桌面客户端到 TalkIME 后端仍是明文 HTTP，这是已知风险；后端到 Microsoft 和火山引擎的连接使用 HTTPS/WSS。我们建议在迁移到 HTTPS 前不要听写高度敏感内容。</p>
+    </section>
+
+    <section id="zh-contact">
+      <h2>8. 政策更新与联系我们</h2>
+      <p>如果数据处理方式发生实质变化，我们会更新本页日期，并在合理情况下通过下载页或产品界面提示。TalkIME 不专门面向儿童；请监护人协助未成年人理解并使用本服务。</p>
+      <p>隐私问题、数据查看或删除请求：微信 <strong>reasonair</strong>，也可以从<a href="index.html#wx-help">下载页的客服入口</a>联系我们。</p>
+    </section>
+  </article>
+
+  <article id="en" class="english" lang="en">
+    <h2>Privacy Policy</h2>
+    <p class="meta">Effective and last updated: August 23, 2026</p>
+
+    <section>
+      <h2>1. Scope</h2>
+      <p>This policy applies to the TalkIME Windows application, backend service, download website, and installer downloads. TalkIME is provided by the individual developer <strong>Yana Yuan</strong>. We do not sell personal data or use in-app data for advertising.</p>
+    </section>
+
+    <section>
+      <h2>2. Data We Process</h2>
+      <h3>Microsoft account</h3>
+      <p>Microsoft handles sign-in. TalkIME receives and stores the Microsoft account object ID, email address, display name, entitlement information, and a TalkIME application session token. A local copy is stored in <code>%LOCALAPPDATA%\TalkIME\account.json</code>, while account and entitlement records are also stored in the TalkIME backend database. The application token currently has no automatic expiry. Local sign-out removes the local token but does not automatically delete backend records or backups.</p>
+
+      <h3>Voice and generated text</h3>
+      <p>Microphone audio is collected only after you start dictation or voice correction. The TalkIME backend forwards audio to Volcengine Doubao for speech recognition. Recognized text, candidate text, correction instructions, the text being corrected, glossary records, and expression preferences may be sent to Doubao language models when required for correction, rewriting, formatting, voice correction, or glossary generation.</p>
+      <p>The TalkIME application database does not store raw audio, complete prompts, or complete model responses. They pass through service memory during a request and are processed by Volcengine under its own terms and privacy practices.</p>
+
+      <h3>Cursor and screen context</h3>
+      <p><strong>Cursor context and screen context are enabled by default</strong> and can be disabled separately in Settings. When enabled, relevant text from the foreground application is sent with the current transcript to the cloud language model. Context is read after a dictation is triggered; TalkIME does not continuously upload the screen in the background.</p>
+      <p>For WeChat, TalkIME may capture the current WeChat window and run Windows OCR or PP-OCRv6 Tiny locally. The temporary screenshot is deleted after that OCR operation and is not uploaded. If screen context is enabled, the resulting OCR text may still be included in the cloud correction request. Current-slide text in PowerPoint editing mode may be read locally through COM.</p>
+
+      <h3>Local personalization and history</h3>
+      <p>Settings, expression preferences, glossary terms, correction history, candidate-selection history, a random install ID, pending analytics events, and diagnostic logs are stored under <code>%LOCALAPPDATA%\TalkIME</code>. Correction and selection histories can contain complete dictated, candidate, or corrected text.</p>
+
+      <h3>Analytics</h3>
+      <p>Usage analytics are enabled by default and can be disabled in Settings. Records may include a random install ID, per-run session ID, account-linked TalkIME user ID, client version, timestamps, feature states, timing, character counts, result choices, and failure stages. Analytics events do not include transcript bodies, glossary entries, or screen text. A small set of pre-login launch and login events is first linked to the random install ID and may be linked to the account after successful sign-in.</p>
+
+      <h3>Diagnostic logs</h3>
+      <p>Local rolling logs may contain complete transcripts, candidates, correction instructions, and corrected results. Each local log is limited to about 3 MB with three backups, or about 12 MB total. Backend rolling logs may contain performance and error information plus the first 30 characters of an ASR result. Backend files rotate at 5 MB with five backups, and some entries may also remain in operating-system journals.</p>
+
+      <h3>Website and download records</h3>
+      <p>The download page uses Microsoft Clarity in consent-denied mode to measure page visits, referrer domains, UTM parameters, release version, and interactions. It does not set a persistent cookie identifier. GitHub Pages, GitHub Releases, Tencent Cloud COS, Clarity, and network providers may still process IP addresses, browser information, request paths, referrers, response sizes, and timing. TalkIME has enabled COS access logs for download measurement, security, and troubleshooting.</p>
+    </section>
+
+    <section>
+      <h2>3. Purposes</h2>
+      <ul>
+        <li>Authenticate users and provide account entitlements;</li>
+        <li>Provide speech recognition, contextual correction, rewriting, formatting, and voice correction;</li>
+        <li>Save user-selected settings, glossary terms, preferences, and correction history;</li>
+        <li>Measure usage, prevent abuse, troubleshoot failures, and protect the service;</li>
+        <li>Analyze installation, login, dictation, and result adoption to improve TalkIME;</li>
+        <li>Deliver installers, check for updates, and measure download reliability.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Service Providers</h2>
+      <ul>
+        <li><strong>Microsoft</strong> for identity and Microsoft Clarity website analytics;</li>
+        <li><strong>Volcengine / Doubao</strong> for cloud speech recognition and language-model processing;</li>
+        <li><strong>Tencent Cloud</strong> for backend infrastructure, installer delivery, and download access logs;</li>
+        <li><strong>GitHub</strong> for the public download page and backup installer delivery.</li>
+      </ul>
+      <p>These providers process data under their own terms and in their service regions, which may include mainland China and other regions they use. Local Windows OCR, PP-OCRv6 Tiny, and PowerPoint COM do not themselves send screenshots or Office documents to those providers, although extracted text may be included in a later cloud correction request.</p>
+    </section>
+
+    <section>
+      <h2>5. Retention and Deletion</h2>
+      <ul>
+        <li><strong>Local data:</strong> Settings, history, glossary data, and the install ID currently have no automatic expiry. They may remain in <code>%LOCALAPPDATA%\TalkIME</code> after uninstall and can be removed by deleting that directory.</li>
+        <li><strong>Temporary screenshots:</strong> WeChat OCR screenshots are deleted with the temporary directory after each OCR operation.</li>
+        <li><strong>Client logs:</strong> Old files are overwritten within an approximately 12 MB rolling limit and can be removed by deleting the local data directory.</li>
+        <li><strong>Backend accounts, analytics, and usage:</strong> There is currently no automatic expiry or self-service deletion endpoint. Records are retained until no longer needed to provide and operate the service, the service ends, or a verified deletion request is completed.</li>
+        <li><strong>Operational and download logs:</strong> File logs rotate by size. Server journals, COS access logs, and backups currently do not share a single automatic expiry and may remain until manual cleanup or an applicable deletion request is completed.</li>
+        <li><strong>Cloud requests:</strong> TalkIME does not retain raw audio or complete model requests in its application database. Any provider-side temporary storage or retention is governed by the provider's policies.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Your Choices</h2>
+      <ul>
+        <li>Disable cursor context, screen context, enhanced screen recognition, or analytics in Settings;</li>
+        <li>Delete correction history or glossary entries;</li>
+        <li>Sign out to remove the locally stored application token;</li>
+        <li>Delete <code>%LOCALAPPDATA%\TalkIME</code> to remove local account cache, settings, history, glossary data, install ID, and logs;</li>
+        <li>Contact us to request access, correction, or deletion of backend account records. We may need to verify account ownership and will explain any portion that cannot be removed immediately because of security, legal, or backup constraints.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Security</h2>
+      <p>We use access controls, request authentication, usage limits, and log rotation to reduce risk, but no system can be completely secure. The current desktop release connects to the TalkIME backend over unencrypted HTTP. Connections from the backend to Microsoft and Volcengine use HTTPS/WSS. Do not dictate highly sensitive information until the client-to-backend channel has been migrated to HTTPS.</p>
+    </section>
+
+    <section>
+      <h2>8. Updates and Contact</h2>
+      <p>We will update the date on this page when processing practices materially change and, where reasonable, provide notice through the download page or product. TalkIME is not specifically directed to children; guardians should help minors understand and use the service.</p>
+      <p>For privacy questions or data access and deletion requests, contact us on WeChat at <strong>reasonair</strong>, or use the <a href="index.html#wx-help">support entry on the download page</a>.</p>
+    </section>
+  </article>
+</main>
+
+<footer>© 2026 TalkIME · <a href="index.html">下载页</a></footer>
+</body>
+</html>
