@@ -133,7 +133,8 @@
   .hero-reply a:focus-visible,.reply-showcase a:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
   .reply-showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:64px;align-items:center}
   .reply-quote{font-size:clamp(24px,3vw,32px);font-weight:700;line-height:1.4;padding:18px 22px;margin:0 0 18px;border-left:3px solid var(--accent);border-radius:0 12px 12px 0;background:var(--accent-soft)}
-  .reply-example{color:var(--text-2);font-size:16px;line-height:1.8}
+  .reply-speaker{display:block;font-size:14px;font-weight:600;color:var(--accent);margin-bottom:8px}
+  .reply-example{color:var(--text-2);font-size:16px;line-height:1.8;margin-bottom:18px}
   .reply-steps{list-style:none;display:grid;gap:20px;margin:28px 0}
   .reply-steps li{display:flex;gap:14px;align-items:flex-start}
   .reply-steps .feat-num{width:32px;height:32px;flex-shrink:0;margin:0;font-size:14px}
@@ -368,8 +369,9 @@
     </div>
     <div class="reply-showcase">
       <div class="reply-copy reveal">
-        <blockquote class="reply-quote">“帮我问问进展。”</blockquote>
-        <p class="reply-example">不只是泛泛地问“怎么样了”，而是接着前面聊过的 <span lang="en">Dev Box</span> 和 <span lang="en">Project Harbor</span>，问对方登录后，项目能不能正常运行。</p>
+        <p class="reply-example">比如，同事在英文聊天里说正在测试项目。你想追问结果，却不知道英文怎么说。</p>
+        <blockquote class="reply-quote"><span class="reply-speaker">你对 TalkIME 说：</span>“帮我问问进展。”</blockquote>
+        <p class="reply-example"><strong>TalkIME 帮你写：</strong>参考你框选的聊天，生成英文回复草稿，帮你问同事项目测试得怎么样、能不能正常运行。不是把你的指令逐字翻译给同事。</p>
         <ol class="reply-steps">
           <li>
             <span class="feat-num" aria-hidden="true">1</span>
@@ -400,9 +402,9 @@
         </figcaption>
         <details class="reply-transcript">
           <summary>查看文字版演示</summary>
-          <p>想问同事进展，又不知道英文怎么说？选好对话，只要说一句：“帮我问问进展。”</p>
-          <p>它不是笼统地问一句“怎么样了”，而是接着前面的聊天，问对方登录开发环境后，项目能不能正常运行。</p>
-          <p>看一眼，确认没问题，再填入聊天框。最后，自己点发送。</p>
+          <p>同事在英文聊天里说正在测试项目。你想追问结果，却不知道英文怎么说。选好对话后，你对 TalkIME 说：“帮我问问进展。”</p>
+          <p>TalkIME 根据聊天内容生成英文草稿，帮你问同事项目测试得怎么样、能不能正常运行，而不是逐字翻译你的指令。</p>
+          <p>你检查草稿，确认没问题后再填入聊天框。最后，由你自己点发送。</p>
         </details>
       </figure>
     </div>
