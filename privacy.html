@@ -92,14 +92,14 @@
     <div class="eyebrow">Privacy</div>
     <h1>隐私政策</h1>
     <p class="lead">这份政策说明 TalkIME 在提供 Windows 语音输入服务时会处理哪些数据、数据流向哪里，以及你可以如何控制或删除这些数据。</p>
-    <p class="meta">生效及最后更新日期：2026 年 8 月 23 日</p>
+    <p class="meta">生效及最后更新日期：2026 年 10 月 13 日</p>
     <div class="language-links">
       <a href="#zh">中文</a>
       <a href="#en">English</a>
     </div>
     <div class="notice">
       <strong>当前传输安全说明</strong>
-      <p>当前桌面客户端连接 TalkIME 后端时使用 HTTP，尚未启用 HTTPS。Microsoft 登录令牌、应用会话令牌、语音音频和启用的上下文会经过这段连接。Microsoft 与火山引擎自身的后续连接使用 HTTPS/WSS。迁移完成前，请不要用 TalkIME 处理密码、支付信息、医疗记录等高度敏感内容。</p>
+      <p>当前桌面客户端连接 TalkIME 后端时使用 HTTP，尚未启用 HTTPS。Microsoft 登录令牌、应用会话令牌、语音音频、启用的上下文和用于聊天回复的确认选区图片会经过这段连接。Microsoft 与火山引擎自身的后续连接使用 HTTPS/WSS。迁移完成前，请不要用 TalkIME 处理密码、支付信息、医疗记录等高度敏感内容。</p>
     </div>
   </header>
 
@@ -132,18 +132,19 @@
       <p>应用会话令牌目前没有自动到期时间。本地“退出登录”会删除本机保存的令牌，但不会自动删除后端账号、统计记录或备份。</p>
 
       <h3>2.2 语音和生成内容</h3>
-      <p>只有在你主动开始一次听写或语音修改时，TalkIME 才采集麦克风音频。音频经 TalkIME 后端转发给火山引擎豆包语音识别。识别文本、候选文本、语音修改要求和待修改文本会在需要时发送给豆包大模型，以完成纠错、润色、格式整理、语音改字或个人词库生成。</p>
+      <p>只有在你主动开始一次听写、语音修改或聊天回复录音时，TalkIME 才采集麦克风音频。音频经 TalkIME 后端转发给火山引擎豆包语音识别。识别文本、候选文本、语音修改要求和待修改文本会在需要时发送给云端大模型，以完成纠错、润色、格式整理、语音改字、聊天回复或个人词库生成。</p>
       <p>TalkIME 后端数据库不保存原始音频、完整提示词或完整模型结果；这些内容会在请求期间进入服务内存并被上游服务处理。火山引擎对请求数据的处理同时受其服务条款和隐私规则约束。</p>
 
-      <h3>2.3 光标前文、屏幕语境和本地 OCR</h3>
-      <p><strong>光标前文和屏幕语境默认开启</strong>，可以在设置中分别关闭。启用后，应用会读取当前前台窗口中的相关文字，并将其随本次识别文本发送给豆包大模型，用于同音词、专业词和语境纠错。TalkIME 不会持续后台上传屏幕；上下文读取只在一次听写触发后发生。</p>
-      <p>微信无法提供可用的界面文字时，TalkIME 可在本机截取当前微信窗口并使用 Windows OCR 或 PP-OCRv6 Tiny 识别。截图写入临时目录并在该次 OCR 完成后删除，截图本身不会上传；如果屏幕语境开启，识别出的文字仍会作为本次上下文发送给云端大模型。PowerPoint 正常编辑模式的当前幻灯片文字可通过本机 COM 接口读取。</p>
+      <h3>2.3 光标前文、屏幕语境和截图回复</h3>
+      <p>光标前文和屏幕语境可以在设置中分别开关。启用后，应用会读取当前前台窗口中的相关文字，并将其随本次识别文本发送给豆包大模型，用于同音词、专业词和语境纠错。TalkIME 不会持续后台上传屏幕；普通听写的上下文读取只在一次听写触发后发生。</p>
+      <p>普通听写中，微信无法提供可用的界面文字时，TalkIME 可在本机截取当前微信窗口并使用 Windows OCR 或 PP-OCRv6 Tiny 识别。该本机 OCR 截图写入临时目录并在该次 OCR 完成后删除，图片本身不会上传；如果屏幕语境开启，识别出的文字仍会作为本次上下文发送给云端大模型。PowerPoint 正常编辑模式的当前幻灯片文字可通过本机 COM 接口读取。</p>
+      <p><strong>截图回复与上述本机 OCR 不同：</strong>从 v1.2.3 起，你手动框选并确认聊天截图后，点击生成回复或提交语音要求时，选区图片、语音转写、回复要求及修改上下文会经 TalkIME 后端发送给火山引擎上托管的多模态大模型（豆包，必要时切换至 DeepSeek 备用模型）。这项主动发起的截图回复不由普通听写的屏幕语境开关控制。请仅框选必要内容，避免包含无关人员信息或高度敏感内容，并核对生成结果。</p>
 
       <h3>2.4 本机个性化数据和历史</h3>
       <p>设置、表达偏好、个人词库、修改历史、候选选择历史、匿名安装 ID、待发送统计事件和诊断日志保存在 <code>%LOCALAPPDATA%\TalkIME</code>。修改历史和候选选择历史包含用户口述、候选或修改后的完整文字；表达偏好和个人词库会在相关云端请求中使用。</p>
 
       <h3>2.5 使用统计</h3>
-      <p>使用统计默认开启，可在设置中关闭。统计包含随机安装 ID、每次启动生成的会话 ID、Microsoft 账号对应的 TalkIME 用户 ID、客户端版本、事件时间，以及功能状态、耗时、字符数、结果选择、失败阶段等数值或枚举字段。运营统计事件不包含转写正文、个人词条或屏幕正文。登录前的少量启动和登录事件会先与随机安装 ID 关联，登录成功后可与账号关联。</p>
+      <p>使用统计默认开启，可在设置中关闭。统计包含随机安装 ID、每次启动生成的会话 ID、Microsoft 账号对应的 TalkIME 用户 ID、客户端版本、事件时间，以及功能状态、耗时、字符数、结果选择、失败阶段等数值或枚举字段。聊天回复还记录会话标识、流程阶段及完成、取消、失败或中断状态，用于统计使用人数和流程完成情况。运营统计事件不包含转写正文、个人词条、屏幕正文或截图图片。登录前的少量启动和登录事件会先与随机安装 ID 关联，登录成功后可与账号关联。</p>
 
       <h3>2.6 诊断日志</h3>
       <p>客户端滚动诊断日志可能包含完整的识别文本、候选文本、修改要求和修改结果。单个日志文件上限约 3 MB，并保留 3 个备份，合计约 12 MB。后端滚动日志会记录性能和错误信息，并可能包含识别结果的前 30 个字符；文件日志按 5 MB 轮转并保留 5 个备份，部分内容也可能由服务器系统日志保留。</p>
@@ -156,7 +157,7 @@
       <h2>3. 使用目的</h2>
       <ul>
         <li>验证登录并提供账号和使用资格；</li>
-        <li>完成语音识别、语境纠错、润色、格式整理和语音修改；</li>
+        <li>完成语音识别、语境纠错、润色、格式整理、语音修改和截图回复；</li>
         <li>保存用户选择的设置、词库、表达偏好和修改历史；</li>
         <li>计算用量、限制滥用、排查故障并维护服务安全；</li>
         <li>分析安装、登录、听写和结果采用情况，改进产品；</li>
@@ -168,7 +169,7 @@
       <h2>4. 服务提供方和数据流向</h2>
       <ul>
         <li><strong>Microsoft</strong>：账号登录；下载页上的 Microsoft Clarity 访问与交互分析。</li>
-        <li><strong>火山引擎 / 豆包</strong>：云端语音识别和大模型文本处理。</li>
+        <li><strong>火山引擎</strong>：豆包语音识别，以及豆包、DeepSeek 等托管模型的文本和多模态处理。</li>
         <li><strong>腾讯云</strong>：TalkIME 后端基础设施、安装包分发和下载访问日志。</li>
         <li><strong>GitHub</strong>：公开下载页和备用安装包分发。</li>
       </ul>
@@ -212,7 +213,7 @@
 
   <article id="en" class="english" lang="en">
     <h2>Privacy Policy</h2>
-    <p class="meta">Effective and last updated: August 23, 2026</p>
+    <p class="meta">Effective and last updated: October 13, 2026</p>
 
     <section>
       <h2>1. Scope</h2>
@@ -225,18 +226,19 @@
       <p>Microsoft handles sign-in. TalkIME receives and stores the Microsoft account object ID, email address, display name, entitlement information, and a TalkIME application session token. A local copy is stored in <code>%LOCALAPPDATA%\TalkIME\account.json</code>, while account and entitlement records are also stored in the TalkIME backend database. The application token currently has no automatic expiry. Local sign-out removes the local token but does not automatically delete backend records or backups.</p>
 
       <h3>Voice and generated text</h3>
-      <p>Microphone audio is collected only after you start dictation or voice correction. The TalkIME backend forwards audio to Volcengine Doubao for speech recognition. Recognized text, candidate text, correction instructions, the text being corrected, glossary records, and expression preferences may be sent to Doubao language models when required for correction, rewriting, formatting, voice correction, or glossary generation.</p>
+      <p>Microphone audio is collected only after you start dictation, voice correction, or a chat-reply recording. The TalkIME backend forwards audio to Volcengine Doubao for speech recognition. Recognized text, candidate text, correction instructions, the text being corrected, glossary records, and expression preferences may be sent to cloud language models when required for correction, rewriting, formatting, voice correction, chat replies, or glossary generation.</p>
       <p>The TalkIME application database does not store raw audio, complete prompts, or complete model responses. They pass through service memory during a request and are processed by Volcengine under its own terms and privacy practices.</p>
 
-      <h3>Cursor and screen context</h3>
-      <p><strong>Cursor context and screen context are enabled by default</strong> and can be disabled separately in Settings. When enabled, relevant text from the foreground application is sent with the current transcript to the cloud language model. Context is read after a dictation is triggered; TalkIME does not continuously upload the screen in the background.</p>
-      <p>For WeChat, TalkIME may capture the current WeChat window and run Windows OCR or PP-OCRv6 Tiny locally. The temporary screenshot is deleted after that OCR operation and is not uploaded. If screen context is enabled, the resulting OCR text may still be included in the cloud correction request. Current-slide text in PowerPoint editing mode may be read locally through COM.</p>
+      <h3>Cursor context, screen context, and screenshot replies</h3>
+      <p>Cursor context and screen context can be controlled separately in Settings. When enabled, relevant text from the foreground application is sent with the current transcript to the cloud language model. Ordinary dictation reads context after a dictation is triggered; TalkIME does not continuously upload the screen in the background.</p>
+      <p>During ordinary dictation in WeChat, TalkIME may capture the current WeChat window and run Windows OCR or PP-OCRv6 Tiny locally. That local OCR screenshot is deleted after the operation and is not uploaded. If screen context is enabled, the resulting OCR text may still be included in the cloud correction request. Current-slide text in PowerPoint editing mode may be read locally through COM.</p>
+      <p><strong>Screenshot replies are different from local OCR:</strong> starting with v1.2.3, after you manually select and confirm a chat screenshot, requesting a reply or submitting voice instructions sends the selected image, transcript, reply instructions, and revision context through the TalkIME backend to multimodal models hosted on Volcengine (Doubao, with a DeepSeek fallback when needed). This explicitly initiated feature is independent of the ordinary dictation screen-context setting. Select only necessary content, avoid unrelated personal or highly sensitive information, and review generated drafts.</p>
 
       <h3>Local personalization and history</h3>
       <p>Settings, expression preferences, glossary terms, correction history, candidate-selection history, a random install ID, pending analytics events, and diagnostic logs are stored under <code>%LOCALAPPDATA%\TalkIME</code>. Correction and selection histories can contain complete dictated, candidate, or corrected text.</p>
 
       <h3>Analytics</h3>
-      <p>Usage analytics are enabled by default and can be disabled in Settings. Records may include a random install ID, per-run session ID, account-linked TalkIME user ID, client version, timestamps, feature states, timing, character counts, result choices, and failure stages. Analytics events do not include transcript bodies, glossary entries, or screen text. A small set of pre-login launch and login events is first linked to the random install ID and may be linked to the account after successful sign-in.</p>
+      <p>Usage analytics are enabled by default and can be disabled in Settings. Records may include a random install ID, per-run session ID, account-linked TalkIME user ID, client version, timestamps, feature states, timing, character counts, result choices, and failure stages. Chat replies also report a reply-session identifier, workflow stages, and completion, cancellation, failure, or interruption outcomes to measure usage and completion. Analytics events do not include transcript bodies, glossary entries, screen text, or screenshot images. A small set of pre-login launch and login events is first linked to the random install ID and may be linked to the account after successful sign-in.</p>
 
       <h3>Diagnostic logs</h3>
       <p>Local rolling logs may contain complete transcripts, candidates, correction instructions, and corrected results. Each local log is limited to about 3 MB with three backups, or about 12 MB total. Backend rolling logs may contain performance and error information plus the first 30 characters of an ASR result. Backend files rotate at 5 MB with five backups, and some entries may also remain in operating-system journals.</p>
@@ -249,7 +251,7 @@
       <h2>3. Purposes</h2>
       <ul>
         <li>Authenticate users and provide account entitlements;</li>
-        <li>Provide speech recognition, contextual correction, rewriting, formatting, and voice correction;</li>
+        <li>Provide speech recognition, contextual correction, rewriting, formatting, voice correction, and screenshot replies;</li>
         <li>Save user-selected settings, glossary terms, preferences, and correction history;</li>
         <li>Measure usage, prevent abuse, troubleshoot failures, and protect the service;</li>
         <li>Analyze installation, login, dictation, and result adoption to improve TalkIME;</li>
@@ -261,7 +263,7 @@
       <h2>4. Service Providers</h2>
       <ul>
         <li><strong>Microsoft</strong> for identity and Microsoft Clarity website analytics;</li>
-        <li><strong>Volcengine / Doubao</strong> for cloud speech recognition and language-model processing;</li>
+        <li><strong>Volcengine</strong> for Doubao speech recognition and text or multimodal processing with hosted models including Doubao and DeepSeek;</li>
         <li><strong>Tencent Cloud</strong> for backend infrastructure, installer delivery, and download access logs;</li>
         <li><strong>GitHub</strong> for the public download page and backup installer delivery.</li>
       </ul>
@@ -293,7 +295,7 @@
 
     <section>
       <h2>7. Security</h2>
-      <p>We use access controls, request authentication, usage limits, and log rotation to reduce risk, but no system can be completely secure. The current desktop release connects to the TalkIME backend over unencrypted HTTP. Connections from the backend to Microsoft and Volcengine use HTTPS/WSS. Do not dictate highly sensitive information until the client-to-backend channel has been migrated to HTTPS.</p>
+      <p>We use access controls, request authentication, usage limits, and log rotation to reduce risk, but no system can be completely secure. The current desktop release connects to the TalkIME backend over unencrypted HTTP, including audio, context, and confirmed screenshot-reply images. Connections from the backend to Microsoft and Volcengine use HTTPS/WSS. Do not submit highly sensitive information until the client-to-backend channel has been migrated to HTTPS.</p>
     </section>
 
     <section>
