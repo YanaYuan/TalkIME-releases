@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="TalkiMe，下一代语音输入法。理解当下的意图，连接长期的记忆。让表达不止于文字，不止于屏幕。">
+  <meta name="robots" content="noindex, nofollow">
+  <title>TalkiMe · 昆山杯产品演示</title>
+  <style>
+    :root {
+      --black: #080808;
+      --white: #f5f4ee;
+      --yellow: #ffe600;
+      --muted: #a7a7a0;
+      --line: #333330;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+      color: var(--white);
+      background: var(--black);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; overflow: hidden; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, video:focus-visible, a:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 5px;
+    }
+    button:disabled { cursor: default; opacity: .32; }
+    ::selection { color: var(--black); background: var(--yellow); }
+    .yellow { color: var(--yellow); }
+    .stage { position: fixed; inset: 0 0 48px; overflow: hidden; }
+    .deck {
+      position: absolute; left: 50%; top: 50%;
+      width: 1920px; height: 1080px;
+      transform: translate(-50%, -50%) scale(var(--scale, .5));
+      transform-origin: center;
+      background: var(--black);
+    }
+    .slide { position: absolute; inset: 0; padding: 76px 96px 72px; }
+    @media screen {
+      .deck.vision-active { left: auto; right: 0; transform: translateY(-50%) scale(var(--scale, .5)); transform-origin: right center; }
+    }
+    .slide-top { display: flex; align-items: center; justify-content: space-between; }
+    .wordmark { display: inline-flex; align-items: center; gap: 12px; font-family: Arial, sans-serif; font-size: 30px; font-weight: 700; letter-spacing: -1px; }
+    .wordmark::before { content: ""; flex: none; width: 44px; height: 44px; border-radius: 10px; background: #f5f4fc url("TalkiMe_pitch_assets/logo.png") center / contain no-repeat; }
+    .edition { font-size: 19px; color: var(--muted); letter-spacing: 2px; }
+    .slide-footer {
+      position: absolute; bottom: 44px; left: 96px; right: 96px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 18px; color: var(--muted);
+    }
+    h1, h2, p { margin: 0; }
+    h1, h2 { font-weight: 700; }
+    .cover { overflow: hidden; isolation: isolate; }
+    .cover::before {
+      content: ""; position: absolute; inset: 0 0 0 32%; z-index: -2;
+      background: url("TalkiMe_pitch_assets/hardware.png") center 30% / cover no-repeat;
+      filter: grayscale(1) brightness(.46) contrast(1.05);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 65%);
+      mask-image: linear-gradient(to right, transparent, #000 65%);
+    }
+    .cover::after {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(to top, #080808 0%, rgb(8 8 8 / .82) 12%, transparent 62%);
+    }
+    .cover .slide-top { justify-content: flex-start; }
+    .cover .wordmark { font-size: 42px; gap: 16px; }
+    .cover .wordmark::before { width: 56px; height: 56px; border-radius: 13px; }
+    .cover-content { position: absolute; left: 96px; right: 96px; bottom: 100px; }
+    .cover h1 { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+    .cover-generation { font-size: 160px; line-height: 1.35; font-weight: 700; letter-spacing: -4px; padding-right: 4px; color: var(--yellow); }
+    .cover-product { font-size: 148px; line-height: 1.35; font-weight: 700; letter-spacing: -4px; padding-right: 4px; }
+    .cover-description { margin-top: 44px; font-size: 36px; line-height: 1.8; letter-spacing: 1px; color: #cecec7; }
+    .cover-description strong { font-weight: 600; color: #fff; }
+    .cover-description .yellow { font-weight: 600; }
+    .proof-layout { display: grid; grid-template-columns: 1176px 1fr; gap: 56px; margin-top: 28px; }
+    .proof h1 { margin-top: 32px; font-size: 64px; line-height: 1.35; letter-spacing: -3px; }
+    .feedback-grid { display: grid; grid-template-columns: repeat(4, 280px); gap: 18px; }
+    .feedback-card { margin: 0; }
+    .feedback-quote { height: 90px; margin: 0 0 18px; font-size: 28px; line-height: 1.5; font-weight: 400; }
+    .feedback-card[data-custom="true"] .feedback-quote { visibility: hidden; }
+    .feedback-slot {
+      width: 280px; height: 610px; border: 1px solid #55554e;
+      border-radius: 16px; overflow: hidden; background: #101010;
+      position: relative;
+    }
+    .feedback-slot img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .view-feedback { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
+    .view-feedback:focus-visible { outline-offset: -5px; }
+    .feedback-slot:not([data-loaded="true"]) .view-feedback { display: none; }
+    .feedback-viewer { width: min(1000px, calc(100vw - 40px)); max-width: none; max-height: 92vh; overflow: auto; padding: 24px; }
+    .feedback-viewer-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; position: sticky; top: -24px; padding: 16px 0; background: #111110; }
+    .feedback-viewer-header form { margin: 0; }
+    .feedback-viewer .feedback-full { display: block; width: 100%; height: auto; }
+    .feedback-slot .placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; }
+    .feedback-index { font-family: Arial, sans-serif; font-size: 68px; font-weight: 700; color: #666660; letter-spacing: -3px; }
+    .feedback-slot .placeholder-label { font-size: 24px; color: var(--muted); }
+    .feedback-slot .placeholder-note { font-size: 17px; color: var(--muted); }
+    .metric { display: flex; flex-direction: column; padding-left: 32px; border-left: 1px solid var(--line); }
+    .metric-kicker { font-size: 25px; line-height: 1.68; }
+    .metric-value { font-family: Arial, sans-serif; font-size: 196px; line-height: 1.12; letter-spacing: -12px; font-weight: 700; color: var(--yellow); margin: 66px 0 24px -8px; white-space: nowrap; }
+    .metric-value span { font-size: 84px; letter-spacing: -4px; margin-left: 5px; }
+    .metric-name { font-size: 38px; line-height: 1.5; font-weight: 700; }
+    .metric-definition { margin-top: 22px; font-size: 25px; line-height: 1.75; color: var(--muted); }
+    .metric-date { margin-top: auto; padding-top: 22px; border-top: 1px solid var(--line); font-size: 24px; line-height: 1.7; color: var(--muted); }
+    .bridge-content { margin-top: 230px; }
+    .bridge-kicker { margin-bottom: 40px; font-size: 44px; line-height: 1.4; color: var(--muted); }
+    .bridge h1 { font-size: 104px; line-height: 1.35; letter-spacing: -3px; }
+    .demo-layout { display: grid; grid-template-columns: 520px 1fr; gap: 72px; margin-top: 112px; align-items: start; }
+    .demo-kicker { font-size: 23px; line-height: 1.5; letter-spacing: 2px; color: var(--yellow); margin-bottom: 26px; }
+    .demo h1 { font-size: 76px; line-height: 1.35; letter-spacing: -3px; }
+    .demo-description { margin-top: 44px; font-size: 30px; line-height: 1.8; color: var(--muted); }
+    .demo-takeaway { margin-top: 62px; padding-left: 22px; border-left: 3px solid var(--yellow); font-size: 31px; line-height: 1.7; }
+    .demo-small { font-size: 21px; color: var(--muted); line-height: 1.65; margin-top: 26px; }
+    .context-demo .demo-layout { grid-template-columns: 440px 1fr; margin-top: 96px; align-items: center; }
+    .context-demo .demo-kicker { font-size: 26px; margin-bottom: 32px; }
+    .context-demo h1 { font-size: 64px; line-height: 1.3; letter-spacing: -2px; }
+    .context-demo .demo-description { margin-top: 36px; }
+    .intent-demo .demo-layout { margin-top: 96px; align-items: center; }
+    .intent-demo .demo-kicker { font-size: 26px; margin-bottom: 32px; }
+    .intent-comparison { margin-bottom: 20px; font-size: 32px; line-height: 1.5; color: var(--muted); }
+    .intent-demo .demo-description { margin-top: 36px; font-size: 28px; line-height: 1.8; }
+    .intent-demo .demo-description strong { display: block; margin-bottom: 12px; font-size: 34px; line-height: 1.5; color: var(--white); }
+    .brain-demo .demo-layout, .cursor-demo .demo-layout { margin-top: 96px; align-items: center; }
+    .brain-demo .demo-kicker, .cursor-demo .demo-kicker { font-size: 26px; margin-bottom: 32px; }
+    .brain-demo h1 { font-size: 72px; line-height: 1.4; letter-spacing: -2px; }
+    .brain-demo .demo-description, .cursor-demo .demo-description { margin-top: 36px; font-size: 28px; line-height: 1.8; }
+    .cursor-demo h1 { font-size: 64px; line-height: 1.4; letter-spacing: -2px; }
+    .vision-layout > div { position: absolute; left: 96px; top: 50%; width: 850px; transform: translateY(-50%); }
+    .vision-kicker { font-size: 36px; line-height: 1.5; color: var(--muted); margin-bottom: 36px; }
+    .vision h1 { font-size: 100px; line-height: 1.3; letter-spacing: -4px; }
+    .vision-copy { margin-top: 48px; font-size: 32px; line-height: 1.8; color: var(--muted); }
+    .hardware-figure { position: absolute; top: 0; right: 0; bottom: 0; width: 900px; margin: 0; }
+    .hardware-figure figcaption { position: absolute; left: 32px; bottom: 32px; padding: 6px 12px; background: #080808cc; font-size: 20px; line-height: 1.5; color: var(--white); pointer-events: none; }
+    .hardware-slot { position: relative; width: 100%; height: 100%; background: var(--black); overflow: hidden; }
+    .hardware-slot img {
+      display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 35%;
+      -webkit-mask-image: linear-gradient(to right, transparent, rgb(0 0 0 / .3) 8%, rgb(0 0 0 / .8) 18%, #000 28%);
+      mask-image: linear-gradient(to right, transparent, rgb(0 0 0 / .3) 8%, rgb(0 0 0 / .8) 18%, #000 28%);
+    }
+    .hardware-slot .placeholder { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; height: 100%; text-align: center; }
+    .hardware-slot .placeholder-label { font-size: 28px; }
+    .hardware-slot .placeholder-note { font-size: 21px; line-height: 1.7; color: var(--muted); }
+    .media-heading { display: flex; justify-content: space-between; align-items: center; font-size: 22px; line-height: 1.5; margin-bottom: 20px; }
+    .media-heading span:last-child { font-family: Arial, sans-serif; font-size: 18px; letter-spacing: 2px; color: var(--muted); }
+    .video-slot { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); background: #111110; overflow: hidden; }
+    .video-slot video { display: block; width: 100%; height: 100%; object-fit: contain; background: #080808; }
+    .video-slot .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 22px; }
+    .video-number { font: 700 128px/1 Arial, sans-serif; letter-spacing: -8px; color: #50504a; }
+    .video-slot .placeholder-label { font-size: 30px; letter-spacing: 1px; }
+    .video-slot .placeholder-note { font-size: 21px; color: var(--muted); }
+    .media-caption { display: flex; gap: 30px; justify-content: space-between; margin-top: 18px; font-size: 20px; line-height: 1.6; color: var(--muted); }
+    .media-caption span:last-child { text-align: right; }
+    .pick-media {
+      display: none;
+      position: absolute; right: 14px; top: 14px; z-index: 2;
+      border: 1px solid #626258; background: #080808; color: var(--white);
+      padding: 10px 16px; font-size: 20px;
+      opacity: 0; pointer-events: none;
+    }
+    .editing .pick-media { display: block; opacity: 1; pointer-events: auto; }
+    .media-slot.dragging { outline: 4px solid var(--yellow); outline-offset: -4px; }
+    .media-slot[data-loaded="true"] .placeholder { display: none; }
+    .media-slot .asset-name { display: none; }
+    .editing .media-slot[data-loaded="true"] .asset-name {
+      position: absolute; left: 12px; right: 12px; bottom: 12px;
+      display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      padding: 6px 9px; background: #080808; font-size: 16px; color: var(--muted);
+      pointer-events: none;
+    }
+    .editing .video-slot .asset-name { bottom: 62px !important; }
+    .controls {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
+      border-top: 1px solid #242420; background: #101010;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 22px; gap: 16px; font-size: 12px;
+    }
+    .control-group { display: flex; align-items: center; gap: 12px; }
+    .controls button { color: #deded7; background: transparent; border: 1px solid #45453e; padding: 5px 10px; border-radius: 0; }
+    .controls button[aria-pressed="true"] { color: var(--black); background: var(--yellow); border-color: var(--yellow); }
+    .notice {
+      position: fixed; z-index: 10; bottom: 62px; left: 50%; transform: translateX(-50%);
+      max-width: min(760px, 90vw); background: #20201c; border: 1px solid var(--yellow);
+      padding: 14px 20px; font-size: 14px; line-height: 1.6; color: var(--white);
+    }
+    dialog { max-width: 620px; width: calc(100% - 40px); padding: 32px; border: 1px solid #66665a; color: var(--white); background: #111110; }
+    dialog::backdrop { background: #000c; }
+    dialog h2 { font-size: 23px; margin-bottom: 20px; }
+    dialog p { font-size: 15px; line-height: 1.9; margin: 12px 0; color: #c2c2b9; }
+    dialog button { border: 1px solid var(--yellow); color: var(--yellow); background: transparent; padding: 8px 20px; margin-top: 15px; }
+    kbd { border: 1px solid #62625b; padding: 1px 5px; color: var(--white); font: inherit; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    body.clean .stage { bottom: 0; }
+    body.clean .controls { display: none; }
+    @media (max-width: 760px) {
+      .controls { padding: 0 10px; gap: 8px; }
+      .control-group { gap: 6px; }
+      .controls button { padding: 5px 7px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .pick-media { transition: opacity .15s; }
+    }
+    .ai-appendix { font-size: 24px; line-height: 1.6; }
+    .ai-appendix .ai-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .ai-appendix .ai-audience { color: var(--yellow); font-size: 25px; font-weight: 700; letter-spacing: 1px; }
+    .ai-appendix .ai-schema { font: 19px/1.5 Consolas, monospace; color: var(--muted); }
+    .ai-appendix h1 { margin-top: 24px; font-size: 48px; line-height: 1.4; letter-spacing: -1px; }
+    .ai-appendix .ai-meta { margin-top: 12px; font-size: 21px; color: var(--muted); }
+    .ai-appendix .ai-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 40px; margin-top: 32px; }
+    .ai-appendix .ai-block { padding: 20px 24px 24px; border: 1px solid var(--line); border-top: 2px solid var(--yellow); background: #0d0d0c; }
+    .ai-appendix .ai-block > p + p { margin-top: 22px; }
+    .ai-appendix h2 { margin-bottom: 20px; color: var(--yellow); font: 600 23px/1.5 Consolas, "Microsoft YaHei", monospace; }
+    .ai-appendix dl { margin: 0; }
+    .ai-appendix .ai-field { display: grid; grid-template-columns: 145px minmax(0, 1fr); gap: 18px; margin-top: 12px; }
+    .ai-appendix .ai-field:first-child { margin-top: 0; }
+    .ai-appendix dt { color: var(--muted); font: 20px/1.9 Consolas, "Microsoft YaHei", monospace; overflow-wrap: anywhere; }
+    .ai-appendix dd { margin: 0; overflow-wrap: anywhere; }
+    .ai-appendix .ai-note { margin-top: 26px; padding-left: 18px; border-left: 2px solid var(--yellow); color: var(--muted); font-size: 21px; }
+    .ai-appendix.ai-demos .ai-block { padding: 16px 20px; font-size: 22px; line-height: 1.5; }
+    .ai-appendix.ai-demos .ai-field { grid-template-columns: 120px minmax(0, 1fr); margin-top: 8px; }
+    .ai-appendix.ai-demos dt { font-size: 18px; line-height: 1.8; }
+    .ai-appendix.ai-demos h2 { margin-bottom: 12px; }
+    .reading-divider .divider-content { position: absolute; left: 96px; right: 96px; top: 50%; transform: translateY(-50%); }
+    .reading-divider .divider-kicker { margin-bottom: 32px; color: var(--muted); font-size: 36px; line-height: 1.5; }
+    .reading-divider h1 { font-size: 112px; line-height: 1.35; letter-spacing: -3px; color: var(--yellow); }
+    .reading-divider .divider-description { margin-top: 40px; font-size: 30px; line-height: 1.8; color: var(--muted); }
+    .architecture-slide { padding: 0; background: #fafbff; }
+    .architecture-slide .architecture-slot { width: 100%; height: 100%; background: #fafbff; }
+    .architecture-slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    @media screen {
+      .stage:has(.architecture-slide:not([hidden])) { background: #fafbff; }
+      body:has(.architecture-slide:not([hidden])) .controls { background: #fafbff; border-color: #d9dfeb; }
+      body:has(.architecture-slide:not([hidden])) .controls button { color: #334466; border-color: #b8c2d3; }
+    }
+    @media print {
+      @page { size: 20in 11.25in; margin: 0; }
+      html, body { width: 1920px; height: auto; overflow: visible; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .stage, .deck { position: static; width: 1920px; height: auto; overflow: visible; transform: none; }
+      .slide, .slide[hidden] { display: block !important; position: relative; width: 1920px; height: 1080px; break-after: page; }
+      .slide:last-child { break-after: auto; }
+      .controls, .notice, dialog, .pick-media, .asset-name { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-label="TalkiMe 昆山杯演示稿">
+    <div class="deck">
+      <section class="slide cover" aria-label="第 1 页：TalkiMe，下一代语音输入法" data-title="下一代语音输入法">
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="cover-content">
+          <h1><span class="cover-generation">下一代</span><span class="cover-product">语音输入法</span></h1>
+          <p class="cover-description">理解当下的<strong>意图</strong>，连接长期的<strong>记忆</strong>。<br>让表达不止于文字，<span class="yellow">不止于屏幕</span>。</p>
+        </div>
+      </section>
+
+      <section class="slide proof" aria-label="第 2 页：用户反馈与留存" data-title="用户的回答" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <h1>产品好不好，用户最有<span class="yellow">发言权。</span></h1>
+        <div class="proof-layout">
+          <div>
+            <div class="feedback-grid">
+              <figure class="feedback-card">
+                <blockquote class="feedback-quote">“解决大家<br>痛点的软件”</blockquote>
+                <div class="media-slot feedback-slot" data-key="feedback-1" data-kind="image" data-loaded="true">
+                  <div class="placeholder"><span class="feedback-index">01</span><span class="placeholder-label">用户反馈截图</span><span class="placeholder-note">请选择图片素材</span></div>
+                  <button class="view-feedback" type="button" aria-label="放大查看第一张用户反馈截图" title="点击放大查看完整截图"><img src="TalkiMe_pitch_assets/user1.png" alt="第一张用户反馈截图"></button>
+                  <button class="pick-media" type="button" aria-label="替换第一张用户反馈截图">替换截图</button><span class="asset-name">user1.png</span>
+                </div>
+              </figure>
+              <figure class="feedback-card">
+                <blockquote class="feedback-quote">“核心需求<br>满足了”</blockquote>
+                <div class="media-slot feedback-slot" data-key="feedback-2" data-kind="image" data-loaded="true">
+                  <div class="placeholder"><span class="feedback-index">02</span><span class="placeholder-label">用户反馈截图</span><span class="placeholder-note">请选择图片素材</span></div>
+                  <button class="view-feedback" type="button" aria-label="放大查看第二张用户反馈截图" title="点击放大查看完整截图"><img src="TalkiMe_pitch_assets/user2.png" alt="第二张用户反馈截图"></button>
+                  <button class="pick-media" type="button" aria-label="替换第二张用户反馈截图">替换截图</button><span class="asset-name">user2.png</span>
+                </div>
+              </figure>
+              <figure class="feedback-card">
+                <blockquote class="feedback-quote">“确实是<br>很好用的工具”</blockquote>
+                <div class="media-slot feedback-slot" data-key="feedback-3" data-kind="image" data-loaded="true">
+                  <div class="placeholder"><span class="feedback-index">03</span><span class="placeholder-label">用户反馈截图</span><span class="placeholder-note">请选择图片素材</span></div>
+                  <button class="view-feedback" type="button" aria-label="放大查看第三张用户反馈截图" title="点击放大查看完整截图"><img src="TalkiMe_pitch_assets/user3.jpg" alt="第三张用户反馈截图"></button>
+                  <button class="pick-media" type="button" aria-label="替换第三张用户反馈截图">替换截图</button><span class="asset-name">user3.jpg</span>
+                </div>
+              </figure>
+              <figure class="feedback-card">
+                <blockquote class="feedback-quote">“识别率比大厂的<br>还好用”</blockquote>
+                <div class="media-slot feedback-slot" data-key="feedback-4" data-kind="image" data-loaded="true">
+                  <div class="placeholder"><span class="feedback-index">04</span><span class="placeholder-label">用户反馈截图</span><span class="placeholder-note">请选择图片素材</span></div>
+                  <button class="view-feedback" type="button" aria-label="放大查看第四张用户反馈截图" title="点击放大查看完整截图"><img src="TalkiMe_pitch_assets/user4.jpg" alt="第四张用户反馈截图"></button>
+                  <button class="pick-media" type="button" aria-label="替换第四张用户反馈截图">替换截图</button><span class="asset-name">user4.jpg</span>
+                </div>
+              </figure>
+            </div>
+          </div>
+          <aside class="metric" aria-label="注册第二周留存率百分之三十六点四">
+            <p class="metric-kicker">再看，他们有没有回来。</p>
+            <p class="metric-value">36.4<span>%</span></p>
+            <p class="metric-name">注册第二周留存率</p>
+            <p class="metric-definition">超过三分之一的新用户，<br>注册第二周仍是活跃用户。</p>
+            <p class="metric-date">累计用户数据，<br>截至 2026 年 10 月 23 日。</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="slide bridge" aria-label="第 3 页：以准备比赛为例" data-title="以准备比赛为例" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="bridge-content">
+          <p class="bridge-kicker">不讲功能清单。</p>
+          <h1>以准备这次比赛为例，<br>看 TalkiMe 如何<span class="yellow">展现能力。</span></h1>
+        </div>
+      </section>
+
+      <section class="slide demo context-demo" aria-label="第 4 页：理解上下文演示" data-title="理解上下文" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="demo-layout">
+          <div>
+            <p class="demo-kicker">DEMO 01 / 理解上下文</p>
+            <h1>屏幕上正在<br>发生什么，<br>也应该<span class="yellow">参与<br>这次输入。</span></h1>
+            <p class="demo-description">它获得的，不只是声音。</p>
+          </div>
+          <div>
+            <div class="media-slot video-slot" data-key="demo-1" data-kind="video" data-loaded="true">
+              <div class="placeholder"><span class="video-number">01</span><span class="placeholder-label">放入上下文识别录屏</span><span class="placeholder-note">TalkiMe 与微信语音输入的同场对比</span></div>
+              <video controls playsinline preload="metadata" src="TalkiMe_pitch_assets/demo1.mp4" poster="TalkiMe_pitch_assets/demo1.jpg" aria-label="上下文识别演示视频"></video>
+              <button class="pick-media" type="button" aria-label="选择上下文识别演示视频">选择视频</button><span class="asset-name"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide demo intent-demo" aria-label="第 5 页：理解意图与英文回复演示" data-title="替你说话" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="demo-layout">
+          <div>
+            <p class="demo-kicker">DEMO 02 / 理解意图</p>
+            <p class="intent-comparison">别的输入法在逐字打字，</p>
+            <h1>TalkiMe 在<br><span class="yellow">替你说话。</span></h1>
+            <p class="demo-description"><strong>说思路，出成稿。</strong>中文说要求，英文回复直接成稿。<br>不是逐句翻译。</p>
+          </div>
+          <div>
+            <div class="media-slot video-slot" data-key="demo-2" data-kind="video" data-loaded="true">
+              <div class="placeholder"><span class="video-number">02</span><span class="placeholder-label">放入截图回复录屏</span><span class="placeholder-note">看懂对话，只说意图，生成对应语言的回复</span></div>
+              <video controls playsinline preload="metadata" src="TalkiMe_pitch_assets/demo2.mp4" poster="TalkiMe_pitch_assets/demo2.jpg" aria-label="截图与跨语言回复演示视频"></video>
+              <button class="pick-media" type="button" aria-label="选择截图回复演示视频">选择视频</button><span class="asset-name"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide demo brain-demo" aria-label="第 6 页：外接大脑与长期用户背景" data-title="外接大脑" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="demo-layout">
+          <div>
+            <p class="demo-kicker">DEMO 03 / 外接大脑</p>
+            <h1>带着长期记忆，<br><span class="yellow">替你思考。</span></h1>
+            <p class="demo-description">连接的大脑，积累了你的个人资料：<br>项目背景、人际关系与历史记录。<br>带着这些<span class="yellow">长期记忆</span>，思考和回应。</p>
+          </div>
+          <div>
+            <div class="media-slot video-slot" data-key="demo-3" data-kind="video" data-loaded="true">
+              <div class="placeholder"><span class="video-number">03</span><span class="placeholder-label">放入留存查询录屏</span><span class="placeholder-note">Kevin 问起留存，结合已有项目背景查询并回复</span></div>
+              <video controls playsinline preload="metadata" src="TalkiMe_pitch_assets/demo3.mp4" poster="TalkiMe_pitch_assets/demo3.jpg" aria-label="用户留存查询回复演示视频"></video>
+              <button class="pick-media" type="button" aria-label="选择数据查询演示视频">选择视频</button><span class="asset-name"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide demo cursor-demo" aria-label="第 7 页：光标即入口，运算与操作支持多样表达" data-title="表达，不止于文字" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="demo-layout">
+          <div>
+            <p class="demo-kicker">DEMO 04 / 光标即入口</p>
+            <h1>你要表达的，<br>不必只是<span class="yellow">文字。</span></h1>
+            <p class="demo-description">从光标出发，调用运算与操作能力，<br>把想法变成图片、数据或一页 PPT。<br>这一次，把手绘草图变成演示中的一页。</p>
+          </div>
+          <div>
+            <div class="media-slot video-slot" data-key="demo-4" data-kind="video" data-loaded="true">
+              <div class="placeholder"><span class="video-number">04</span><span class="placeholder-label">放入手绘图转 PPT 录屏</span><span class="placeholder-note">发出指令，插入美化图，客户端显示新的一页</span></div>
+              <video controls playsinline preload="metadata" src="TalkiMe_pitch_assets/demo4.mp4" poster="TalkiMe_pitch_assets/demo4.jpg" aria-label="手绘图重绘美化并插入 PowerPoint 演示视频"></video>
+              <button class="pick-media" type="button" aria-label="选择光标即入口演示视频">选择视频</button><span class="asset-name"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="slide vision" aria-label="第 8 页：表达助理从屏幕走向现实对话的硬件构想" data-title="表达助理，走进现实" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="vision-layout">
+          <div>
+            <p class="vision-kicker"><span class="yellow">智能戒指 × 耳机</span> · 随身表达助理</p>
+            <h1>从屏幕上的表达，<br>到<span class="yellow">现实中的对话。</span></h1>
+            <p class="vision-copy">戒指收音，耳机传递实时建议。<br>结合你与对方的背景、正在进行的对话，<br>帮你表达，就在交谈的这一刻。</p>
+          </div>
+          <figure class="hardware-figure">
+          <div class="media-slot hardware-slot" data-key="vision-ring" data-kind="image" data-loaded="true">
+            <div class="placeholder"><span class="placeholder-label">戒指佩戴概念图</span><span class="placeholder-note">人物佩戴 · 语音输入设备<br>请选择图片素材</span></div>
+            <img src="TalkiMe_pitch_assets/hardware.png" alt="人物佩戴 TalkiMe 语音输入戒指的硬件概念图">
+            <button class="pick-media" type="button" aria-label="选择戒指佩戴概念图">选择图片</button><span class="asset-name">hardware.png</span>
+          </div>
+            <figcaption>硬件概念</figcaption>
+          </figure>
+        </div>
+      </section>
+      <section class="slide reading-divider" aria-label="第 9 页：产品展示结束，后续供深入阅读" data-title="后续，供深入阅读" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="divider-content">
+          <p class="divider-kicker">产品展示，到此结束。</p>
+          <h1>后续，供深入阅读。</h1>
+          <p class="divider-description">关于产品、功能、技术，以及更远的愿景。</p>
+        </div>
+      </section>
+
+      <section class="slide ai-appendix" aria-label="第 10 页：供深入阅读，产品定位及介绍" data-title="深入阅读 · 产品定位及介绍" hidden>
+        <header class="ai-header"><span class="ai-audience">供深入阅读 / FURTHER READING</span><span class="ai-schema">01 / product / 2026-10-24</span></header>
+        <h1>产品定位及介绍</h1>
+        <p class="ai-meta">一句话定位：TalkiMe 是下一代语音输入法，也是从输入入口生长出来的个人表达助理。</p>
+        <div class="ai-grid">
+          <article class="ai-block">
+            <h2>[problem → product] 从“打出来”到“表达出来”</h2>
+            <p>用户真正想完成的不是一次转写，而是回复一条消息、写清楚一封邮件，或把一个想法讲给别人。即使语音已经被准确识别，用户往往仍要补充背景、组织措辞、转换语言，才能得到想要的表达。</p>
+            <p>TalkiMe 从高频的语音输入切入，把用户说的话与当前屏幕上的情境结合起来。用户不必总是先想好完整句子再逐字念出，也可以直接说出思路和意图，由产品帮助组织成稿。</p>
+            <p>它的演进方向不是一个需要反复切换过去的独立聊天窗口，而是让帮助表达的能力出现在用户正在沟通和工作的地方。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[principle → value] 一条始终围绕表达的主线</h2>
+            <p><strong>理解当下的意图，连接长期的记忆。让表达不止于文字，不止于屏幕。</strong></p>
+            <p>理解当下，是让屏幕内容参与输入；连接记忆，是让个人用词、表达偏好，以及进一步连接的大脑中的项目背景与历史记录参与思考。前者让这一次输入更合适，后者让表达更像用户自己。</p>
+            <p>当大脑具备运算和操作能力，表达可以成为图片、数据或一页 PPT；当入口延伸到戒指和耳机，表达辅助也可以进入现实对话。能力在扩展，服务于人与人沟通的目标不变。</p>
+          </article>
+        </div>
+        <p class="ai-note">产品阶段：语音输入、屏幕上下文与个性化能力已上线；外接 Agent 的长期背景与多媒介表达已做实验性联动演示；戒指 × 耳机属于未来愿景。下文依次说明功能、技术、Demo 与愿景。</p>
+      </section>
+
+      <section class="slide ai-appendix" aria-label="第 11 页：供深入阅读，功能介绍" data-title="深入阅读 · 功能介绍" hidden>
+        <header class="ai-header"><span class="ai-audience">供深入阅读 / FURTHER READING</span><span class="ai-schema">02 / features</span></header>
+        <h1>功能介绍</h1>
+        <p class="ai-meta">以下为当前已上线能力：从自然说话，到清楚成稿，再到符合个人习惯的表达。</p>
+        <div class="ai-grid">
+          <article class="ai-block">
+            <h2>[input → draft] 自然说，直接形成可用文字</h2>
+            <dl>
+              <div class="ai-field"><dt>识别能力</dt><dd>支持日常语音输入、中英混输、方言识别，以及悄悄话音量的低声识别，适应用户自然的说话方式。</dd></div>
+              <div class="ai-field"><dt>文字整理</dt><dd>整理标点、数字和文本格式，对口语进行润色，让输出更适合阅读、发送和用于正式文稿。</dd></div>
+              <div class="ai-field"><dt>口述改口</dt><dd>理解本次口述中的自我纠正，把最终想说的内容整理到结果里，而不是原样保留前后矛盾的口述。</dd></div>
+              <div class="ai-field"><dt>跨语言表达</dt><dd>支持跨语言输入与翻译。用户可以用中文说明意图，由 TalkiMe 生成英文等目标语言的表达，不必自己先组织外语句子。</dd></div>
+            </dl>
+          </article>
+          <article class="ai-block">
+            <h2>[context → personal] 知道此刻在说什么、怎样说</h2>
+            <dl>
+              <div class="ai-field"><dt>屏幕上下文</dt><dd>识别当前屏幕的相关内容，将用户正在看的对话、文档等语境纳入输入，辅助理解术语、指代与表达意图。</dd></div>
+              <div class="ai-field"><dt>意图成稿</dt><dd>结合对话背景与用户口述要求组织回复，帮助用户“说思路，出成稿”，而非只做逐字转写。</dd></div>
+              <div class="ai-field"><dt>纠错与词库</dt><dd>记录纠错、自动生成个人词库，积累用户自己的用词，为后续输入提供个性化依据。</dd></div>
+              <div class="ai-field"><dt>表达偏好</dt><dd>允许用户设置表达习惯，例如要求“最后一个标点符号不要加句号”，让输出符合个人使用偏好。</dd></div>
+            </dl>
+          </article>
+        </div>
+        <p class="ai-note">产品方对基础语音输入体验的判断：TalkiMe 已与豆包、微信、讯飞等业界头部同类产品处于同一水平（on par）；此处为产品方评价，不代表统一测试条件下的第三方排名。</p>
+      </section>
+
+      <section class="slide ai-appendix" aria-label="第 12 页：供深入阅读，技术介绍" data-title="深入阅读 · 技术介绍" hidden>
+        <header class="ai-header"><span class="ai-audience">供深入阅读 / FURTHER READING</span><span class="ai-schema">03 / technology / context-first</span></header>
+        <h1>技术介绍</h1>
+        <p class="ai-meta">技术重点：围绕真实输入场景持续研究，把语音、屏幕语境和个人信息组织成一套自研的表达辅助方案。</p>
+        <div class="ai-grid">
+          <article class="ai-block">
+            <h2>[core] 深入屏幕上下文，而非仅接入转写 API</h2>
+            <p>只识别声音，无法充分理解用户此刻的表达。TalkiMe 的研发重点之一，是让输入系统获得并利用当前屏幕中的相关信息，把“用户看到了什么”与“用户说了什么”联系起来。</p>
+            <p>这不仅是多传一张截图：需要围绕应用界面、对话区域、文字信息与语境组织持续打磨，让得到的上下文能够服务于术语理解、意图判断和成稿，而不是成为无关信息的堆积。</p>
+            <p>技术实现结合本地模型、OpenCV 等基础能力，以及语音识别和语言理解能力。自研价值在于上下文处理、能力协同与真实场景适配。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[system] 从一次输入，延伸到持续理解</h2>
+            <p><strong>当前已上线的处理链：</strong>语音 + 屏幕上下文 + 个人词库与表达偏好 → 识别与意图理解 → 整理、润色和跨语言成稿。纠错记录为后续个性化提供反馈。</p>
+            <p><strong>实验性扩展：</strong>将输入入口连接到保留项目背景与历史记录的 Agent。当前上下文说明“正在发生什么”，长期背景说明“此前发生过什么、与用户有什么关系”，再由工具完成必要的查询、计算或资料制作。</p>
+            <p>TalkiMe 要积累的是自己的上下文工程与个性化产品能力：让多个技术环节围绕同一个表达目标工作，而不是简单叠加模型接口。</p>
+          </article>
+        </div>
+        <p class="ai-note">技术状态：屏幕上下文、纠错词库与表达偏好属于当前产品；更广泛的长期记忆及工具操作通过外接 Agent 演示，不混同为独立输入法已全面上线的能力。</p>
+      </section>
+
+      <section class="slide ai-appendix ai-demos" aria-label="第 13 页：供深入阅读，Demo 场景介绍" data-title="深入阅读 · Demo 场景介绍" hidden>
+        <header class="ai-header"><span class="ai-audience">供深入阅读 / FURTHER READING</span><span class="ai-schema">04 / demo_story / preparing_this_pitch</span></header>
+        <h1>Demo 场景介绍</h1>
+        <p class="ai-meta">以准备这次比赛为线索：从读懂眼前的材料，到回复消息、回答追问，再到把想法变成演示中的一页。</p>
+        <div class="ai-grid">
+          <article class="ai-block">
+            <h2>[demo_01] 先让它看到我正在看的</h2>
+            <p>准备比赛时，我一边看屏幕上的材料与对话，一边组织输入。如果输入法只听声音，我就得把已经显示在屏幕上的语境重新说一遍。</p>
+            <p>TalkiMe 让当前屏幕内容也参与这次输入。与微信语音输入的同场演示，要说明的不是一个孤立的转写结果，而是输入系统能否利用眼前的语境：它获得的，不只是声音。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[demo_02] 再让它理解我想表达什么</h2>
+            <p>接着，我需要回复一段英文对话。对方给了两个安排，我已经知道要选哪一个，却不想再把背景和措辞完整组织成英文。</p>
+            <p>我只用中文说“选周一的，邮件先给我看”。TalkiMe 结合对话，把选择周一方案、请对方先发邮件供我确认的意思组织成英文回复。这不是逐句翻译，而是从简短意图走到完整表达。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[demo_03] 被追问时，带着背景回答</h2>
+            <p>当 Kevin 问起产品留存，答案已经不在这一屏对话里了。我需要连接了解项目的大脑，利用此前积累的背景和实际数据，而不是再从头介绍一遍 TalkiMe。</p>
+            <p>TalkiMe 将问题交给保留项目上下文的 Agent，查询并组织回复。查留存只是例子；真正展示的是带着项目背景、人际关系与历史记录思考的表达助理。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[demo_04] 最后，让想法不止于文字</h2>
+            <p>现在需要把产品逻辑讲给评委。我已经画了草图，但要表达清楚，需要的是一张图、一页 PPT，而不是再生成一段文字。</p>
+            <p>从输入入口说出要求后，Agent 联动完成草图重绘、美化并插入 PowerPoint，客户端出现新的一页。运算与操作让表达媒介不再受限：光标是入口，沟通成果才是落点。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="slide ai-appendix" aria-label="第 14 页：供深入阅读，未来愿景" data-title="深入阅读 · 未来愿景" hidden>
+        <header class="ai-header"><span class="ai-audience">供深入阅读 / FURTHER READING</span><span class="ai-schema">05 / vision / future_concept</span></header>
+        <h1>未来愿景</h1>
+        <p class="ai-meta">智能戒指 × 耳机：把屏幕里的表达助理带到身边，让帮助发生在真实交谈的当下。</p>
+        <div class="ai-grid">
+          <article class="ai-block">
+            <h2>[scenario] 像有一个了解我的人，陪我交谈</h2>
+            <p>设想用户正与另一个人面对面交谈。戒指接收正在发生的对话，连接的大脑结合对用户、对方以及双方过往背景的了解，判断此刻哪些信息值得补充、下一步可以怎样讨论。</p>
+            <p>建议通过耳机实时传递给用户。用户不需要中断谈话、打开一个软件、重新输入背景，就能在需要表达的这一刻获得帮助，自己决定接下来怎么说。</p>
+            <p>硬件的意义不只是让一个通用大模型可以随身携带，而是把了解用户的表达助理带到现实世界：戒指是感知入口，耳机是反馈出口，个人背景让建议与此人、此刻相关。</p>
+          </article>
+          <article class="ai-block">
+            <h2>[continuity] 改变的是媒介，不变的是表达</h2>
+            <p>在屏幕里，回复消息、写邮件、制作图表和 PPT，都服务于人与人的表达和交流。在现实里，同样的能力帮助用户当面沟通。它不是从输入法突然跳到无关的硬件，而是把同一条表达主线继续向外延伸。</p>
+            <p>查询、计算与操作能力，是让表达更有依据、媒介更多样的支撑，而不是产品的最终目的。TalkiMe 希望从“把声音变成文字”，走向“理解我想说什么，并帮助我以合适的方式表达出来”。</p>
+            <p><strong>理解当下的意图，连接长期的记忆。让表达不止于文字，不止于屏幕。</strong></p>
+          </article>
+        </div>
+        <p class="ai-note">本页为未来构想，不表示戒指已经上市或实时对话助理已实现。现实谈话收音以参与者知情同意为前提，个人背景资料须经授权使用；用户始终保留最终表达和行动决定。</p>
+      </section>
+      <section class="slide reading-divider" aria-label="第 15 页：附录分隔页" data-title="附录" hidden>
+        <header class="slide-top"><span class="wordmark">TalkiMe</span></header>
+        <div class="divider-content">
+          <h1>附录</h1>
+          <p class="divider-description">TalkiMe 技术架构图</p>
+        </div>
+      </section>
+      <section class="slide architecture-slide" aria-label="第 16 页：TalkiMe 概念架构图" data-title="附录 · 技术架构图" hidden>
+        <div class="media-slot architecture-slot" data-key="architecture" data-kind="image" data-loaded="true">
+          <div class="placeholder"><span class="placeholder-label">TalkiMe 架构图</span><span class="placeholder-note">请选择架构图图片</span></div>
+          <img src="TalkiMe_pitch_assets/architecture.png" alt="TalkiMe 概念架构：自然语音、当前屏幕上下文与长期记忆共同参与理解、决策、行动和学习；Agent 操作结果反馈到上下文与记忆。">
+          <button class="pick-media" type="button" aria-label="选择架构图">选择图片</button><span class="asset-name">architecture.png</span>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="controls" aria-label="演示控制">
+    <div class="control-group">
+      <button id="previous" type="button" aria-label="上一页">上一页</button>
+      <button id="next" type="button" aria-label="下一页">下一页</button>
+    </div>
+    <div class="control-group">
+      <button id="edit" type="button" aria-pressed="false" hidden>替换素材</button>
+      <button id="fullscreen" type="button">全屏</button>
+      <button id="help" type="button" aria-label="查看操作说明" hidden>说明</button>
+    </div>
+  </nav>
+  <input class="sr-only" id="media-picker" type="file" tabindex="-1" aria-label="选择本地图片或视频">
+  <p class="notice" id="notice" role="status" hidden></p>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <h2 id="help-title">演示操作说明</h2>
+    <p><kbd>←</kbd> <kbd>→</kbd> 或 PageUp / PageDown 翻页；Home / End 跳到首页或末页。<kbd>F</kbd> 全屏；<kbd>H</kbd> 隐藏或恢复底部控制栏；<kbd>?</kbd> 查看说明。本地文件另支持 <kbd>E</kbd> 开关素材编辑；在线分享版仅供浏览。</p>
+    <p>本地文件按 E 后可选择或拖入素材，支持常见图片格式及浏览器可播放的 MP4 / WebM 视频。在线分享版不读取或保存浏览器中的替换素材。</p>
+    <p>四张真实用户反馈已随文件保存，按 user1 至 user4 排列。大字为对应截图中的原话节选，点击截图可放大并上下滚动查看完整内容；本地替换截图后会隐藏原有节选，避免错配。四段演示视频已内置：Demo 01 上下文识别、Demo 02 跨语言回复、Demo 03 留存查询、Demo 04 手绘图转 PPT。</p>
+    <p>用户反馈页数据口径：注册日为第 0 天，第 7—13 天至少有一天活跃，计为第二周留存用户。截至 2026 年 10 月 23 日，共纳入 110 位用户，其中 40 位在第二周活跃，40 ÷ 110 = 36.36%，展示为 36.4%。另有 22 位尚未到注册第二周结束，暂不计入；统计排除创始人账号，按北京时间计算，合并用户而非平均各周百分比。该指标反映历史累计表现，不代表当前版本单独的留存。演示录屏中的历史数据应按录屏当时的口径解释。</p>
+    <p>在线分享版从静态站点加载图片和视频，不调用 TalkiMe 产品接口。本地素材替换不会上传。迁移本地 HTML 时，请一并携带 TalkiMe_pitch_assets 文件夹，其中包含标志、反馈图、概念图、架构图、四段视频与预览图；本地自行替换的素材保存在当前浏览器中，迁移时需另行导入。</p>
+    <p>视频不会自动播放；翻到其他页会暂停。视频获得焦点时，空格和方向键保留给播放器使用。</p>
+    <p>第 8 页为未来硬件构想，不表示戒指设备已经上市。右侧已放入用户提供的 hardware.png 戒指佩戴概念图，铺满幻灯片高度并贴齐右边缘，等比放大、适度裁去上下背景，保留面部、手部和戒指，不拉伸。点击“替换素材”选择图片或直接拖入，可替换为其他概念图。</p>
+    <p>第 9 页为产品展示与深入阅读的分隔页。第 10—14 页依次为产品定位及介绍、功能介绍、技术介绍、Demo 场景介绍、未来愿景。第 15 页为附录分隔页，第 16 页为架构图。最后一页采用与原始架构图协调的白底，画面外留白同步切换，图片完整等比展示、不裁切。已上线状态以产品方说明为依据；架构图包含实验性 Agent 联动，不表示其中所有操作能力已上线。口述中的改口纠正不等于修改已输入到应用中的文字，后者当前不支持。</p>
+    <p>随身沟通搭档的设想：在谈话参与者知情同意后，通过戒指接收现实对话，结合经授权积累的双方背景和当前谈话内容生成沟通建议，再由耳机传递给用户。查询数据、计算与制作资料等能力服务于沟通，而非替代用户作出表达决定；此场景尚属愿景，不代表已实现。</p>
+    <form method="dialog"><button autofocus>知道了</button></form>
+  </dialog>
+  <dialog class="feedback-viewer" id="feedback-dialog" aria-labelledby="feedback-title">
+    <header class="feedback-viewer-header">
+      <h2 id="feedback-title">用户反馈原图</h2>
+      <form method="dialog"><button autofocus>关闭</button></form>
+    </header>
+    <img class="feedback-full" alt="">
+  </dialog>
+  <noscript><p style="position:fixed;top:0;left:0;background:#ffe600;color:#080808;padding:16px;z-index:100">请启用 JavaScript，以使用翻页和本地媒体播放功能。</p></noscript>
+
+  <script>
+    "use strict";
+    const localEditing = location.protocol === "file:";
+    const slides = [...document.querySelectorAll(".slide")];
+    const slots = [...document.querySelectorAll(".media-slot")];
+    const stage = document.querySelector(".stage");
+    const deck = document.querySelector(".deck");
+    const picker = document.querySelector("#media-picker");
+    const editButton = document.querySelector("#edit");
+    const previousButton = document.querySelector("#previous");
+    const nextButton = document.querySelector("#next");
+    const helpDialog = document.querySelector("#help-dialog");
+    const feedbackDialog = document.querySelector("#feedback-dialog");
+    const notice = document.querySelector("#notice");
+    const mediaUrls = new Map();
+    let slideIndex = 0;
+    let chosenSlot = null;
+    let noticeTimer;
+    let database;
+
+    function notify(message, error = false) {
+      clearTimeout(noticeTimer);
+      notice.setAttribute("role", error ? "alert" : "status");
+      notice.textContent = message;
+      notice.hidden = false;
+      noticeTimer = setTimeout(() => { notice.hidden = true; }, error ? 15000 : 6500);
+    }
+
+    function fitDeck() {
+      const scale = Math.min(stage.clientWidth / 1920, stage.clientHeight / 1080);
+      deck.style.setProperty("--scale", String(scale));
+    }
+
+    function showSlide(index, updateHash = true) {
+      const next = Math.max(0, Math.min(slides.length - 1, index));
+      for (const [i, slide] of slides.entries()) {
+        if (i !== next) slide.querySelectorAll("video").forEach(video => video.pause());
+        slide.hidden = i !== next;
+      }
+      slideIndex = next;
+      deck.classList.toggle("vision-active", slides[next].classList.contains("vision"));
+      previousButton.disabled = next === 0;
+      nextButton.disabled = next === slides.length - 1;
+      document.title = `TalkiMe · ${slides[next].dataset.title}`;
+      if (updateHash) history.replaceState(null, "", `#${next + 1}`);
+    }
+
+    function readHash() {
+      const match = /^#([1-9]\d*)$/.exec(location.hash);
+      const pageNumber = match ? Number(match[1]) : 1;
+      showSlide(pageNumber <= slides.length ? pageNumber - 1 : 0, false);
+    }
+
+    function toggleEdit() {
+      if (!localEditing) return;
+      const editing = document.body.classList.toggle("editing");
+      editButton.setAttribute("aria-pressed", String(editing));
+      editButton.textContent = editing ? "结束编辑" : "替换素材";
+      if (editing) notify("选择对应位置的本地图片或视频；也可以直接拖入。素材不会上传。");
+    }
+
+    async function toggleFullscreen() {
+      try {
+        if (document.fullscreenElement) await document.exitFullscreen();
+        else await document.documentElement.requestFullscreen();
+      } catch (error) {
+        console.error("Fullscreen failed", error);
+        notify("浏览器未允许全屏。可使用浏览器菜单全屏，或按 H 隐藏控制栏。", true);
+      }
+    }
+
+    function openDatabase() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("talkime-kunshan-pitch-20261024", 1);
+        request.onupgradeneeded = () => request.result.createObjectStore("media");
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+        request.onblocked = () => reject(new Error("本地素材存储被另一窗口阻塞"));
+      });
+    }
+
+    function readMedia(key) {
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction("media", "readonly");
+        const request = transaction.objectStore("media").get(key);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function saveMedia(key, record) {
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction("media", "readwrite");
+        transaction.objectStore("media").put(record, key);
+        transaction.oncomplete = resolve;
+        transaction.onabort = () => reject(transaction.error || new Error("本地保存已中止"));
+        transaction.onerror = () => reject(transaction.error);
+      });
+    }
+
+    function checkMedia(file, kind) {
+      if (kind === "image") return /^image\/(png|jpeg|webp|gif|avif)$/.test(file.type);
+      return file.type.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogv)$/i.test(file.name);
+    }
+
+    function validateMedia(file, kind, url) {
+      return new Promise((resolve, reject) => {
+        const probe = kind === "image" ? new Image() : document.createElement("video");
+        const event = kind === "image" ? "load" : "loadedmetadata";
+        const timer = setTimeout(() => finish(new Error("媒体读取超时")), 15000);
+        function finish(error) {
+          clearTimeout(timer);
+          probe.removeEventListener(event, success);
+          probe.removeEventListener("error", failure);
+          if (kind === "video") { probe.removeAttribute("src"); probe.load(); }
+          if (error) reject(error); else resolve();
+        }
+        function success() {
+          if (kind === "video" && (!probe.videoWidth || !probe.videoHeight)) {
+            finish(new Error("文件不包含可显示的视频画面"));
+          } else finish();
+        }
+        function failure() { finish(new Error(`无法解码媒体：${file.name}`)); }
+        probe.addEventListener(event, success, { once: true });
+        probe.addEventListener("error", failure, { once: true });
+        probe.src = url;
+        if (kind === "video") { probe.preload = "metadata"; probe.load(); }
+      });
+    }
+
+    async function applyMedia(slot, record) {
+      const file = record.file;
+      const kind = slot.dataset.kind;
+      if (!file || !checkMedia(file, kind)) throw new Error("素材格式与位置不匹配");
+      const url = URL.createObjectURL(file);
+      try {
+        await validateMedia(file, kind, url);
+      } catch (error) {
+        URL.revokeObjectURL(url);
+        throw error;
+      }
+      const media = slot.querySelector(kind === "image" ? "img" : "video");
+      if (kind === "video") media.pause();
+      media.src = url;
+      media.hidden = false;
+      const card = slot.closest(".feedback-card");
+      if (card) card.dataset.custom = "true";
+      slot.dataset.loaded = "true";
+      slot.querySelector(".asset-name").textContent = record.name;
+      const previous = mediaUrls.get(slot.dataset.key);
+      mediaUrls.set(slot.dataset.key, url);
+      if (previous) URL.revokeObjectURL(previous);
+    }
+
+    async function importMedia(slot, file) {
+      if (!file) return;
+      const button = slot.querySelector(".pick-media");
+      if (button.disabled) { notify("这个位置正在读取素材，请稍等。"); return; }
+      if (!checkMedia(file, slot.dataset.kind)) {
+        notify(slot.dataset.kind === "image" ? "这里需要 PNG、JPEG、WebP、GIF 或 AVIF 图片。" : "这里需要浏览器可播放的视频，例如 MP4 或 WebM。", true);
+        return;
+      }
+      button.disabled = true;
+      try {
+        const record = { file, name: file.name };
+        await applyMedia(slot, record);
+        if (!database) {
+          notify("素材已用于本次预览，但本地存储不可用；刷新后需要重新选择。", true);
+          return;
+        }
+        try {
+          await saveMedia(slot.dataset.key, record);
+          notify(`已保存到本机：${file.name}`);
+        } catch (error) {
+          console.error("Media persistence failed", error);
+          notify("素材已用于本次预览，但未能保存到本机；刷新后需要重新选择。请检查浏览器存储空间。", true);
+        }
+      } catch (error) {
+        console.error("Media import failed", error);
+        notify(`素材未替换：${error.message}。请检查文件；视频建议使用 H.264 MP4 或 WebM。`, true);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    for (const slot of slots) {
+      if (localEditing) {
+      slot.querySelector(".pick-media").addEventListener("click", () => {
+        chosenSlot = slot;
+        picker.accept = slot.dataset.kind === "image" ? "image/png,image/jpeg,image/webp,image/gif,image/avif" : "video/*,.mp4,.webm,.mov,.m4v,.ogv";
+        picker.value = "";
+        picker.click();
+      });
+      slot.addEventListener("dragover", event => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "copy";
+        slot.classList.add("dragging");
+      });
+      slot.addEventListener("dragleave", event => {
+        if (!slot.contains(event.relatedTarget)) slot.classList.remove("dragging");
+      });
+      slot.addEventListener("drop", event => {
+        event.preventDefault();
+        slot.classList.remove("dragging");
+        const files = [...event.dataTransfer.files];
+        if (files.length !== 1) { notify("每个位置一次放入一个文件。", true); return; }
+        importMedia(slot, files[0]);
+      });
+      }
+      const video = slot.querySelector("video");
+      if (video) video.addEventListener("error", () => {
+        console.error("Video playback failed", video.error);
+        notify(localEditing ? "视频播放失败，请换用 H.264 MP4 或 WebM 文件。" : "视频加载或播放失败，请检查网络后刷新页面重试。", true);
+      });
+      const image = slot.querySelector("img");
+      if (image) {
+        const reportImageError = () => {
+          console.error("Image failed to load", image.src);
+          image.hidden = true;
+          slot.dataset.loaded = "false";
+          const card = slot.closest(".feedback-card");
+          if (card) card.dataset.custom = "true";
+          notify(`${image.alt}读取失败。${localEditing ? "请检查素材文件夹，或按 E 重新选择图片。" : "请检查网络后刷新页面重试。"}`, true);
+        };
+        image.addEventListener("error", reportImageError);
+        if (image.getAttribute("src") && image.complete && !image.naturalWidth) reportImageError();
+        slot.querySelector(".view-feedback")?.addEventListener("click", () => {
+          const fullImage = feedbackDialog.querySelector("img");
+          fullImage.src = image.src;
+          fullImage.alt = image.alt;
+          feedbackDialog.querySelector("h2").textContent = image.alt;
+          feedbackDialog.showModal();
+          feedbackDialog.scrollTop = 0;
+        });
+      }
+    }
+    picker.addEventListener("change", () => { if (chosenSlot) importMedia(chosenSlot, picker.files[0]); });
+    previousButton.addEventListener("click", () => showSlide(slideIndex - 1));
+    nextButton.addEventListener("click", () => showSlide(slideIndex + 1));
+    editButton.addEventListener("click", toggleEdit);
+    document.querySelector("#fullscreen").addEventListener("click", toggleFullscreen);
+    document.querySelector("#help").addEventListener("click", () => helpDialog.showModal());
+    document.addEventListener("fullscreenchange", () => {
+      document.querySelector("#fullscreen").textContent = document.fullscreenElement ? "退出全屏" : "全屏";
+      fitDeck();
+    });
+    document.addEventListener("keydown", event => {
+      if (helpDialog.open || feedbackDialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.target.closest("input,textarea,select,video,[contenteditable='true']")) return;
+      if (event.target.closest("button") && [" ", "Enter"].includes(event.key)) return;
+      const key = event.key.toLowerCase();
+      if (["arrowright", "arrowdown", "pagedown", " "].includes(key)) {
+        event.preventDefault(); showSlide(slideIndex + 1);
+      } else if (["arrowleft", "arrowup", "pageup"].includes(key)) {
+        event.preventDefault(); showSlide(slideIndex - 1);
+      } else if (key === "home") {
+        event.preventDefault(); showSlide(0);
+      } else if (key === "end") {
+        event.preventDefault(); showSlide(slides.length - 1);
+      } else if (key === "f") {
+        event.preventDefault(); toggleFullscreen();
+      } else if (key === "e") {
+        event.preventDefault(); toggleEdit();
+      } else if (key === "h") {
+        event.preventDefault(); document.body.classList.toggle("clean"); fitDeck();
+      } else if (key === "?") {
+        event.preventDefault(); helpDialog.showModal();
+      }
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) document.querySelectorAll("video").forEach(video => video.pause());
+    });
+    window.addEventListener("resize", fitDeck);
+    window.addEventListener("hashchange", readHash);
+    readHash();
+    fitDeck();
+    (async () => {
+      if (!localEditing) return;
+      try {
+        database = await openDatabase();
+        database.onversionchange = () => {
+          database.close();
+          database = null;
+          notify("本地素材存储已更新，请刷新页面后继续编辑。", true);
+        };
+        for (const slot of slots) {
+          const record = await readMedia(slot.dataset.key);
+          if (!record) continue;
+          try { await applyMedia(slot, record); }
+          catch (error) {
+            console.error("Media restore failed", error);
+            notify(`无法恢复素材“${record.name}”，请重新选择文件。`, true);
+          }
+        }
+      } catch (error) {
+        console.error("Local media storage failed", error);
+        notify("无法读取本机素材存储。仍可选择素材预览，但刷新后不会保留。", true);
+      }
+    })();
+  </script>
+</body>
+</html>
